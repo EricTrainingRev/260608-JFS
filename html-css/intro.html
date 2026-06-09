@@ -44,7 +44,7 @@
         they are looking at
     -->
     <!-- side note: ctrl + / creates/removes a comment on a line -->
-    <h1>This is my main header on the page!!!!!!</h1>
+    <h1 onclick="alert('the header was clicked!')">This is my main header on the page!!!!!!</h1>
     <!-- if you ever need normal text content use the p element -->
     <p>This is some normal text content that also has <span>an inline span</span> to showcase inline elements</p>
 
@@ -71,5 +71,88 @@
     
         -->
     <input type="text"> <!-- use ctrl + space to get intellisense inside the quotes to see the different input types -->
+    <!-- if you want to render an input and button on separate lines you need something like a br between them -->
+     <!-- 
+    
+        Buttons are a very common way to confirm a user has finished adding all their info and are ready to trigger an action. A common
+        way to trigger actions from button clicks is to utilize the "onclick" attribute 
+
+        Another attribute to be aware of is the "disabled" attribute: this prevents the button from being interacted with, and is a good
+        attribute to assign to your buttons before all user input is received.
+     
+     -->
+    <button onclick="alert('The button was clicked!')" disabled>This is my button!</button>
+
+    <!-- 
+        Lists can be used to display information in ordered and unordered fashion
+        - unodered lists (ul): these display lists of items without any emphasis on the order
+        - ordered lists (ol): these display lists of items with an emhpasis on the order
+        - list item (li): these represent the individual items of a list element
+        -->
+
+    <h2>These are fruits in no particular order</h2>
+    <ul>
+        <!-- These list items will have a generic bullet point next to them -->
+        <li>Peach</li>
+        <li>Apple</li>
+        <li>Orange</li>
+    </ul>
+
+    <h2>These are my favorite pets in order of favorite to least favorite (but still enjoyed)</h2>
+    <ol>
+        <!-- These list items will have numbers next to them -->
+        <li>Cat</li>
+        <li>Dog</li>
+        <li>Fish</li>
+    </ol>
+
+    <!-- 
+        A common pattern is to group logically associated elements inside of container elements (div is a common element to be the
+        parent). This allows for easier targeting of the elements for batch operations, most commonly the applying of CSS styling to
+        all the elements in the parent container
+    -->
+
+    <div>
+        <!-- All inputs should ideally have an associated label: this is pivotal for assistive technologies  -->
+        <label for="nameInput">Name Input</label>
+        <input type="text" placeholder="Enter your name" id="nameInput">
+    </div>
+
+    <div>
+        <button onclick="alert(`Hello ${nameInput.value}`)">Get a greeting!</button>
+    </div>
+
+    <!-- css preview -->
+
+    <div style="color:red">
+        <p>These p elements</p>
+        <p>will have one set of styling</p>
+    </div>
+
+    <div style="color:green">
+        <p>Down here these <span style="color:blue">p</span> elements</p>
+        <p>will have separate styling</p>
+    </div>
+
+    <!-- 
+        The way the browser manages all these relationships and connections of the web elements on the page is through a resource called
+        the Document Object Model (DOM). The DOM is a virtual representation of the html that is actually rendered and displayed to the
+        end user.
+
+        The DOM is a node tree that provides the mechanism by which the relationship between elements is enforced. As an example,
+        in the css preview above there are two p elements that are "child" elements of the div with red styling, and there are two
+        p elements that are children of the div with green styling. This relationship is enforced and managed through the DOM
+    -->
+
+    <!-- 
+    
+        img elements are the simpliest way to embed images into web pages. Img elements should have at least two attributes:
+        - src = this tells the page where to load the image from (can be local or web based)
+        - alt = this tells the browser what text to use when the image can not be loaded 
+        
+    -->
+    <img src="./dom.png" alt="a dom visual aid">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/500px-Golde33443.jpg" alt="a cute puppy">
+
 </body>
 </html>

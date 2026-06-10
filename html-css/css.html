@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Example</title>
+    <!-- Use the style element for internal CSS -->
+    <style>
+        /* 
+            When using internal and external CSS you first must provide a  "Selector" to tell the browser which elements you
+            are targeting with the given styling. The format:
+
+            selector {
+                property:value;
+                property:value;
+                etc.
+            }
+        */
+
+        /* 
+            Whenever you are applying styling it is ideal to be as specific as you can with your selector. All elements that
+            match a selector will have the styling applied to them, with few exception
+        */
+
+        /* 
+        
+            to target an element by its id you use the # followed by the id value
+            NOTE: the browser will not enforce uniqueness among ids of your elements: it is up to you to maintain the unique
+            values of your elements
+        
+        */
+        #idTarget {
+            text-align: right;
+        }
+
+        /*
+
+            If you have some shared styling that needs to be applied in multiple elements you should use a class selector. You
+            reference a class by putting a "." in front of it. If you want to target only specific element types with the class
+            you reference the element first and then treat the "." like it is a dot operator
+            - targeting just the class = .className
+            - targeting specific elements with the class = element.className
+
+        */
+
+        .classSelector {
+            color:blue;
+            font-size: 32px;
+        }
+
+    </style>
+    <!-- 
+        If you want to link external styling you need to link it in the document 
+    -->
+    <link rel="stylesheet" href="external.css">
+</head>
+<body>
+    <!--  
+        Cascading Style Sheet (CSS) is the tool we use to add styling to our web elements. There are a multitude of frameworks that can 
+        augment this process, but a fundamental understanding of how CSS works will help you better utilize
+        whatever tools you use for styling.
+
+        The basic format for setting up styling is to tell the browser what property you want to augment and
+        then provide a value with the data needed for that property
+    -->
+    <!-- 
+        - style = the attribute we set to apply in-line styling
+        - color = this is a css property that controls the text color of the element
+        - red = this is the value we are assigning to the color property (use a colon to separate the property/value)
+        - ; = use a semi-colon if you need to assign more than one style property
+
+        NOTE: in-line styling should really only be used for prototyping/examples. Use external styling when
+        possible
+    -->
+    <p style="color:red;text-align: center;">This p element has red text</p>
+
+    <!-- 
+        The content below showcases how the box model works:
+        - margin = the space between elements
+        - border = the outline around the element
+        - padding = the space between the element content and the border
+
+        the MDN CSS documentation is excellent, and it has multiple examples of how to configure the box model: https://developer.mozilla.org/en-US/
+    -->
+
+    <!-- note we specify the numeric value and value type for the margin top (32 pixels in size) -->
+    <p style="margin-top:32px">Adding this to show off how the box model works</p>
+    <div style="text-align: center; border: 3px lime solid; padding: 5px 0px">
+        <input type="text" style="margin-right:16px;">
+        <button style="margin-left: 32px;">button for comparison</button>        
+    </div>
+    <p style="border: 3px lime groove;">This paragraph has a border</p>
+
+    <!-- 
+        So far we have been using in-line styling (setting the style attribute directly in the element) which is fine for examples, 
+        prototyping, and experimenting, but it is not advised for the production environment. In the production environment you
+        ideally want to utilize external styling, or internal if for some reason you can not set up external styling
+
+        - in-line styling = setting the style attribute directly in the element
+        - internal styling = setting styling via a style element in the web page 
+        - external styling = setting styling via an external file and linking it in the web page
+    -->
+
+    <!-- 
+        If we want to apply styling to just this p element, and we don't want to use in-line styling, we have a few options to
+        target it:
+        - id selector: we can assign an id to the element and then select that id for styling
+        - class selector: elements can have classes assigned to them, and classes can have styling associated with them, which means
+                          any element with the class assigned to it will have the associated styling applied
+        - advanced selectors: elements can be targeted by their relationship and/or state for styling
+    -->
+    <p id="idTarget">This element has its styling set via internal styling and is targeted by its id</p>
+    <p class="classSelector">This element has the custom class assigned to it</p>
+    <p class="classSelector">This element also has the custom class assigned to it</p>
+
+    <!-- This gets its styling from the external style sheet -->
+    <div class="fromBeyond">
+        <p>This paragraph gets its styling from an external style sheet</p>
+    </div>
+
+</body>
+</html>

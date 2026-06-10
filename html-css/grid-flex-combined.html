@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        grid-template-areas:
+            "header header header header"
+            "sidebar main main main"
+            "sidebar main main main"
+            "footer footer footer footer";
+        gap: 16px;
+        }
+
+        .header {
+        grid-area: header;
+        }
+
+        .footer {
+        grid-area: footer;
+        }
+
+        .sidebar {
+        grid-area: sidebar;
+        }
+
+        .main {
+        grid-area: main;
+        }
+
+        .nav-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container" style="text-align: center;">
+        <div class="header">
+            <h1>greetings user!</h1>
+            <nav class="nav-container">
+                <a href="">home</a>
+                <a href="">profile</a>
+                <a href="">contact</a>
+                <a href="">history</a>
+            </nav>
+        </div>
+        <div class="footer">
+            <p>footer</p>
+        </div>
+        <div class="main">
+            <p>main</p>
+        </div>
+        <div class="sidebar">
+            <p>sidebar</p>
+        </div>
+    </div>
+</body>
+</html>

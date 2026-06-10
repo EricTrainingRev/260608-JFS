@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    .flex-container {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 16px;
+    }
+    .inner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    }
+    </style>
+</head>
+<body>
+    <div class="flex-container">
+        <div class="inner-container">
+            <label for="usernameInput">username</label>
+            <input type="text" id="usernameInput">            
+        </div>
+        <div>
+            <label for="passwordInput">password</label>
+            <input type="password" id="passwordInput">            
+        </div>
+        <button>login</button>
+    </div>
+    <p style="display: inline;">paragraph 1</p>
+    <p style="display: inline;">paragaph 2</p>
+</body>
+</html>

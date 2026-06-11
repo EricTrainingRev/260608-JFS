@@ -34,26 +34,34 @@
     pElement.textContent = "This is the new text content"; // textContent gives us access to the text of the element
     // note: changing the text content above is destroying the span we hard-coded into the p element
     const div = document.querySelector("div");
-    console.log(div.innerHTML);
-    console.log(div.innerText);
+    console.log(div.innerHTML); // DO NOT CHANGE innerHTML IF USER INPUT IS PART OF THE CHANGE
+    console.log(div.innerText); // if changing text prefer innerText when possible
 
+    // here we use the getElementById to access our element
     const innerP = document.getElementById("innerParagraph");
     console.log(innerP.innerHTML);
     console.log(innerP.innerText);
 
+    // note we can query for elements within other elements: this changes the starting point of the search
     const innerSpan = innerP.querySelector("span");
     console.log(innerSpan.innerHTML);
     console.log(innerSpan.innerText);
 
+    // we can return an HTMLCollection that lets us access elements multiple ways within the collection
     const theStillPresentSpans = document.getElementsByTagName("span");
     console.log(theStillPresentSpans);
+    // index is supported
     console.log(theStillPresentSpans[0]);
+    // sometimes a key is supported
     console.log(theStillPresentSpans.secondSpan);
 
+    // ideally, your elements should all have a way to be identified uniquely for ease of access
     const firstSpan = document.getElementById("firstSpan");
     const secondSpan = document.getElementById("secondSpan");
     console.log(firstSpan);
     console.log(secondSpan);
+
+    
 
 </script>
 </html>

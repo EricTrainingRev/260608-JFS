@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .myClass {
+            color: purple;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            text-align: center;
+            border: 4px lightgreen groove;
+        }
+    </style>
 </head>
 <body>
     <!-- Note: in the js we change the text content which actually destroys the span element -->
@@ -13,6 +21,9 @@
     </div>
     <div>
         <p id="innerParagraph">this p is in <span id="secondSpan">a div</span> container</p>
+    </div>
+    <div id="constructionZone">
+        <!-- We will dynamically add content here via JS -->
     </div>
 </body>
 <script>
@@ -61,7 +72,67 @@
     console.log(firstSpan);
     console.log(secondSpan);
 
-    
+
+    /*
+        We have the ability to add resources into the DOM as well as pulling
+        them out: in order to add elements in you first need to decide where
+        the element is going to exist within the DOM (typically by making a
+        reference to the element you want as its parent), then you create
+        the element in your script, then you add it into the DOM
+    */
+
+    function createElement(){
+        // Step 1: determine the parent
+        const constructionZone = document.getElementById("constructionZone");
+
+        // Step 2: create the element/s we want to add to the page
+        const newParagraph = document.createElement("p");
+        newParagraph.innerText = "We added this via JavaScript!";
+        newParagraph.id = "newParagraph";
+        newParagraph.classList.toggle("myClass");
+        // newParagraph.classList.toggle("myClass"); uncomment if you want to remove the class
+
+
+        function alertUser(){
+            alert("The element was clicked");
+        }
+
+        /*
+            To add functionality to your elements you use event listeners. You need to provide the
+            following arguments to the addEventListener function:
+            - event -> what event is the element listening for
+            - action -> what code (the callback function) needs to be executed when the event triggers
+            - (optional) event propigation direction -> when multiple elements are listening for the same event
+                                                        trigger, do they execute from the top of the DOM node tree
+                                                        down, or do they start at the bottom of the tree and work
+                                                        their way up?
+        */
+        newParagraph.addEventListener("click", alertUser, true);
+        // newParagraph.removeEventListener("click", alertUser); this removes the event listener
+
+        // Step 3: add the new element as a child to the parent
+        constructionZone.appendChild(newParagraph);        
+    }
+
+
+    const constructionZone =  document.getElementById("constructionZone");
+    /*
+        Here we are using an arrow function as our callback: this is quick and easy to add, but it makes
+        it incredibly difficult at best to remove the event listener. If you know you need to add/remove
+        event listeners you should write the callback as a standard function, otherwise an arrow function
+        works just fine
+
+        Note that both the div and p elements' event listeners have a "true" added as a third parameter:
+        this tells the browser they are in "capture" mode so event propogation will start with the div, then
+        go to the p. if you want it to "bubble" from the p to the div you remove the true parameter
+
+        NOTE: both elements must have the true argument, or event propigation will bubble by default
+    */
+    constructionZone.addEventListener("click", event => alert("div event triggered"), true)
+    createElement();
+    const newRefToParagraph = document.getElementById("newParagraph");
+
+
 
 </script>
 </html>

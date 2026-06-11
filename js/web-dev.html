@@ -6,9 +6,13 @@
     <title>Document</title>
 </head>
 <body>
-    <p>This is the initial text</p>
+    <!-- Note: in the js we change the text content which actually destroys the span element -->
+    <p>This is the <span>initial</span> text</p>
     <div>
-        <p id="innerParagraph">this p is in <span>a div</span> container</p>
+        <p>this paragraph has <span id="firstSpan">a span</span> we do not destroy</p>
+    </div>
+    <div>
+        <p id="innerParagraph">this p is in <span id="secondSpan">a div</span> container</p>
     </div>
 </body>
 <script>
@@ -28,6 +32,7 @@
     */
     const pElement = document.querySelector("p"); // this returns the first instance of an element that matches the selector
     pElement.textContent = "This is the new text content"; // textContent gives us access to the text of the element
+    // note: changing the text content above is destroying the span we hard-coded into the p element
     const div = document.querySelector("div");
     console.log(div.innerHTML);
     console.log(div.innerText);
@@ -39,5 +44,16 @@
     const innerSpan = innerP.querySelector("span");
     console.log(innerSpan.innerHTML);
     console.log(innerSpan.innerText);
+
+    const theStillPresentSpans = document.getElementsByTagName("span");
+    console.log(theStillPresentSpans);
+    console.log(theStillPresentSpans[0]);
+    console.log(theStillPresentSpans.secondSpan);
+
+    const firstSpan = document.getElementById("firstSpan");
+    const secondSpan = document.getElementById("secondSpan");
+    console.log(firstSpan);
+    console.log(secondSpan);
+
 </script>
 </html>

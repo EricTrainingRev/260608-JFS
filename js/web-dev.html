@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>This is the initial text</p>
+    <div>
+        <p id="innerParagraph">this p is in <span>a div</span> container</p>
+    </div>
+</body>
+<script>
+    /*
+        In order to interact with web elements in the DOM we need a way to
+        reference those elements. To do this we must choose a selector that
+        will be a valid selector for the element
+    */
+
+    /*
+
+        for the p element with initial text we want to change we can target it via an element selector. There are
+        two primary ways of finding an element:
+        - getElement methods: these are helper methods to query your elements
+        - querySelector: these methods let you provide your own selector to find the element/s you are looking for
+
+    */
+    const pElement = document.querySelector("p"); // this returns the first instance of an element that matches the selector
+    pElement.textContent = "This is the new text content"; // textContent gives us access to the text of the element
+    const div = document.querySelector("div");
+    console.log(div.innerHTML);
+    console.log(div.innerText);
+
+    const innerP = document.getElementById("innerParagraph");
+    console.log(innerP.innerHTML);
+    console.log(innerP.innerText);
+
+    const innerSpan = innerP.querySelector("span");
+    console.log(innerSpan.innerHTML);
+    console.log(innerSpan.innerText);
+</script>
+</html>

@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant Requester as Client/Requester
     participant API as API/Interface Layer
@@ -22,3 +23,4 @@ sequenceDiagram
     Storage-->>DataAccess: Result (Not Found)
     Logic-->>API: Error Signal
     API-->>Requester: 404 Not Found Response
+```

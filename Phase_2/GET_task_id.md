@@ -23,4 +23,12 @@ sequenceDiagram
     Storage-->>DataAccess: Result (Not Found)
     Logic-->>API: Error Signal
     API-->>Requester: 404 Not Found Response
+
+    Note over Requester,Storage: SCENARIO C: User is not authorized to view this task
+    Logic->>DataAccess: Check Existence
+    DataAccess->>Storage: Query (SELECT * WHERE id = :id)
+    Storage-->>DataAccess: Task Object
+    DataAccess-->>Logic: Task Object
+    Logic-->>API: Error Signal
+    API-->>Requester: 403 Forbidden Response
 ```

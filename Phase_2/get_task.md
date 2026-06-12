@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant Requester as Client/Requester
     participant API as API/Interface Layer
@@ -13,3 +14,4 @@ sequenceDiagram
     DataAccess-->>Logic: Task Array Object
     Logic-->>API: Success Data
     API-->>Requester: 200 OK Response [{tasks}]
+```

@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant Requester as Client/Requester
     participant API as API/Interface Layer
@@ -25,3 +26,4 @@ sequenceDiagram
     Storage-->>DataAccess: Result (Not Found)
     Logic-->>API: Conflict/Error Signal
     API-->>Requester: 400 Bad Request Response
+```

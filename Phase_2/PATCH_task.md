@@ -29,6 +29,10 @@ sequenceDiagram
 
     Note over Requester,Storage: SCENARIO D: User is not authorized to update task
     API->>Logic: Process Update One Request
+    Logic->>DataAccess: Check Exists
+    DataAccess->>Storage: Query (SELECT * WHERE id = :id)
+    Storage-->>DataAccess: Task Object
+    DataAccess-->>Logic: Task Object
     Logic-->>API: User is not authorized (either not logged in or not owner of task), Error Signal
     API-->>Requester: 403 Forbidden Response, Body = {error}
 

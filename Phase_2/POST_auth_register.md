@@ -29,5 +29,5 @@ sequenceDiagram
 
     Note over Client, Data Storage: Account info malformed/password invalid
     Service-->>Controller: [Return Failure/Error]
-    Controller-->>Client: [Return 400 response]
+    Controller-->>Client: [Return 422 response]
 ```

@@ -19,4 +19,18 @@ public class AccountService {
     public AccountService(AccountRepo accountRepository) {
         this.accountRepository = accountRepository;
     }
+
+    /*  createAccount - Creates a new account with the given username and password
+
+    * @param username - the username for the new account
+    * @param password - the password for the new account
+    * @return the newly created Account object
+
+     */
+    public User createAccount(String username, String password) {
+        User newAccount = new User(username, password);
+        accountRepository.save(newAccount);
+
+        return newAccount;
+    }
 }

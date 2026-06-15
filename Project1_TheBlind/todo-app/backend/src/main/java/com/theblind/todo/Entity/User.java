@@ -29,4 +29,14 @@ public class User {
 
     @Column(name = "user_creation", updatable = false)
     private LocalDateTime userCreation = LocalDateTime.now();
+
+    /* User constructor
+    * @param username - string of name
+    * @param password - string of password (will be hashed)
+    * @return User object
+    */
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

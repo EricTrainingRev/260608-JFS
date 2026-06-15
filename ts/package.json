@@ -1,0 +1,15 @@
+{
+  "name": "ts-example",
+  "version": "1.0.0",
+  "description": "this is my initial ts example",
+  "license": "ISC",
+  "author": "me",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

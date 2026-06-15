@@ -32,6 +32,9 @@
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
     "noImplicitAny": true,
+    // "noEmitOnError" prevents your TS from being transpiled into JS if
+    // an error is detected
+    "noEmitOnError": true,
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",

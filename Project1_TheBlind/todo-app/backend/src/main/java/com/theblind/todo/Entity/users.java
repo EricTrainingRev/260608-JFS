@@ -16,14 +16,16 @@ import lombok.NoArgsConstructor;
     It is mapped to the "users" table in the database.
 */
 @Data // Lombok provides setters, getters, args constructors, ...
-@NoArgsConstructor
-@Entity
+@NoArgsConstructor // for Entity decorate
+@Entity // class mapped to a table in DB
 @Table(name = "users") // the table's name 
 public class users {
     @Column // not needed b/c of "@Id"
     @Id // Primary Key
     @GeneratedValue(strategy = GenerationType.UUID) // Auto generate values
     private UUID id;
+    @Column(nullable = false, unique = true) // Spring to make username column unique and not null, a composite key
     private String username;
+    @Column(nullable = false) // password != null
     private String password;
 }

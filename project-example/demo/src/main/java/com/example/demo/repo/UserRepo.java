@@ -16,6 +16,7 @@ import com.example.demo.entity.User;
     - the entity the repo is for
     - the type of the primary key
 */
+@Repository
 public interface UserRepo extends JpaRepository<User, UUID> {
     
 }

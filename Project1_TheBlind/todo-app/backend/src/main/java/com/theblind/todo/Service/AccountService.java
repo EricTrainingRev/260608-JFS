@@ -18,17 +18,23 @@ import java.util.List;
 public class AccountService {
     private final AccountRepo accountRepository;
 
-    /* 
-    * Constructor for AccountService
-    * 
-    * @param accountRepository - repository to manage Account entities
+    /**
+    * createAccount - Creates a new account with the given username and password
+    *
+    * @param username - the username for the new account
+    * @param password - the password for the new account
+    * @return the newly created Account object
     */
-   /* 
-    @Autowired
-    public AccountService(AccountRepo accountRepository) {
-        this.accountRepository = accountRepository;
+    public User createAccount(String username, String password) {
+        User newAccount = null;
+
+        if (usernameValidator(username) && passwordValidator(password)) {
+            newAccount = new User(username, password);
+            accountRepository.save(newAccount);
+        }
+
+        return newAccount;
     }
-        */
 
     /**
      * usernameValidator - this method checks whether a given username is valid
@@ -36,28 +42,17 @@ public class AccountService {
      * @param username
      * @return true if username is not blank, does not contain whitespace, 
      *         is not a duplicate, and is between 5 and 15 characters long (inclusive)
-     */
+    */
     private boolean usernameValidator(String username) {
-        // flags for requirements (all false by default)
-        boolean lengthFlag, noWhiteSpaceFlag, notNullFlag, uniqueFlag;
-        lengthFlag = noWhiteSpaceFlag = uniqueFlag = false;
-        noWhiteSpaceFlag = true;
-        notNullFlag = (username != null);
+        // flags for requirements
+        boolean lengthFlag = isCorrectLength(username), noWhiteSpaceFlag = !hasWhiteSpace(username), 
+            notNullFlag = !isNull(username), uniqueFlag = isUnique(username);
 
-        Optional<User> existingUser = accountRepository.findByUsername(username);
-        uniqueFlag = !existingUser.isPresent();
 
-        if (username.length() >= 5 && username.length() <= 15) lengthFlag = true;
+        // if all flags are set, valid username
+        if (notNullFlag && uniqueFlag && noWhiteSpaceFlag && lengthFlag) return true;
 
-        for (char ch : username.toCharArray()) {
-            if (Character.isWhitespace(ch)) {
-                noWhiteSpaceFlag = false;
-                break;
-            }
-        }
-
-        if (noWhiteSpaceFlag && lengthFlag && notNullFlag && uniqueFlag) return true;
-
+        // if not, return error
         String genericMessage = "Username is not valid";
         List<Map.Entry<String, Boolean>> invalidRequirementList = List.of(
             Map.entry("Must be between 5 and 15 characters long (inclusive)", lengthFlag),
@@ -72,51 +67,24 @@ public class AccountService {
     /**
      * passwordValidator - this method checks whether a given password
      * 
-     * @param username
+     * @param password - a string
      * @return true if password is not null, does not contain whitespace, 
      *         contains at least two special characters, at least one uppercase
-     *         letter, at least one lowercase letter, at least one numeric
-     *         character, and is between 5 and 15 characters long (inclusive)
-     */
+     *         letter, at least one lowercase letter, at least one digit, 
+     *         and is between 5 and 15 characters long (inclusive)
+    */
     private boolean passwordValidator(String password) {
-        // flags for requirements (all false by default)
-        boolean specialCharFlag, upperCaseFlag, lowerCaseFlag, numericFlag, lengthFlag, noWhiteSpaceFlag, notNullFlag;
-        specialCharFlag = upperCaseFlag = lowerCaseFlag = numericFlag = lengthFlag = false;
-        noWhiteSpaceFlag = true;
+        // flags for requirements
+        boolean charsFlag = hasRequiredCharacters(password), lengthFlag = isCorrectLength(password), 
+            noWhiteSpaceFlag = !hasWhiteSpace(password), notNullFlag = !isNull(password);
 
-        notNullFlag = (password != null);
+        // if all flags set, valid password
+        if (notNullFlag && noWhiteSpaceFlag && charsFlag && lengthFlag) return true;
 
-        if (password.length() >= 5 && password.length() <= 15) lengthFlag = true;
-
-        // array of special characters, made into a single string for search purposes
-        final char[] SPECIAL_CHARS = {'*', '+', '-', '/', '=', '_', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '~', '`'};
-        String specialCharsString = new String(SPECIAL_CHARS);
-        int specialCharCount = 2;
-        
-        // for loop - iterates through all chars in password string
-        for (char ch : password.toCharArray()) {
-            // return false if a character is white space
-            if (!noWhiteSpaceFlag && Character.isWhitespace(ch)) noWhiteSpaceFlag = false;
-            
-            // if a char meets a requirement, flag is set
-            if (!specialCharFlag && (specialCharsString.indexOf(ch) != -1)) {
-                specialCharCount--;
-                if (specialCharCount <= 0) specialCharFlag = true;
-            }
-            if (!upperCaseFlag && Character.isUpperCase(ch)) upperCaseFlag = true;
-            if (!lowerCaseFlag && Character.isLowerCase(ch)) lowerCaseFlag = true;
-            if (!numericFlag && Character.isDigit(ch)) numericFlag = true;  
-        }
-
-        // if any flag was not set, give exception, otherwise, it is a valid password, return true
-        if (specialCharFlag && upperCaseFlag && lowerCaseFlag && numericFlag) return true;
-
+        // if not, return error
         String genericMessage = "Password is not valid";
         List<Map.Entry<String, Boolean>> invalidRequirementList = List.of(
-            Map.entry("At least two special characters", specialCharFlag),
-            Map.entry("At least one uppercase letter", upperCaseFlag),
-            Map.entry("At least one lowercase letter", lowerCaseFlag),
-            Map.entry("At least one numeric character", numericFlag),
+            Map.entry("Must contain at least one uppercase, one lowercase, one numeric, and two special characters", charsFlag),
             Map.entry("Must be between 5 and 15 characters long (inclusive)", lengthFlag),
             Map.entry("Must not contain whitespace", noWhiteSpaceFlag),
             Map.entry("Must not be null", notNullFlag)
@@ -125,24 +93,54 @@ public class AccountService {
         throw new RegistrationFailure(genericMessage, invalidRequirementList);
     }
 
-    /*  
-    * createAccount - Creates a new account with the given username and password
-    *
-    * @param username - the username for the new account
-    * @param password - the password for the new account
-    * @return the newly created Account object
+    // check if credential is already in database
+    public boolean isUnique(String credential) { return !accountRepository.findByUsername(credential).isPresent(); }
 
-     */
-    public User createAccount(String username, String password) {
-        User newAccount = null;
+    // check if length is between 5 and 15 (inclusive)
+    public boolean isCorrectLength(String credential){
+        return 5 <= credential.length() && credential.length() <= 15;
+    }
 
-        if (usernameValidator(username) && passwordValidator(password)) {
-            newAccount = new User(username, password);
-            accountRepository.save(newAccount);
+    // check if null
+    public boolean isNull(String credential){
+        return credential == null;
+    }
+
+    // check if no whitespace
+    public boolean hasWhiteSpace(String credential) {
+        for (char ch : credential.toCharArray()) {
+            if(Character.isWhitespace(ch)) return true;
         }
 
-        if (newAccount == null) return null;
+        return false;
+    }
 
-        return newAccount;
+    // check if there is at least one uppercase and one lowercase letters, at least one digit, and if there are at least two special characters
+    public boolean hasRequiredCharacters(String credential) {
+        boolean hasLowerCase = false;
+        boolean hasUpperCase = false;
+        boolean hasDigit = false;
+        boolean hasSpecialChars = false;
+
+        // list of special chars, casted into string for search purposes
+        final char[] SPECIAL_CHARS = {'*', '+', '-', '/', '=', '_', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '~', '`'};
+        String specialCharsString = new String(SPECIAL_CHARS);
+        // at least two special characters must be found
+        int specialCharCount = 2;
+
+        for (char ch : credential.toCharArray()) {
+            if (!hasLowerCase && Character.isLowerCase(ch)) hasLowerCase = true;
+            if (!hasUpperCase && Character.isUpperCase(ch)) hasUpperCase = true;
+            if (!hasDigit && Character.isDigit(ch)) hasDigit = true;
+            if (!hasSpecialChars && (specialCharsString.indexOf(ch) != -1)) {
+                specialCharCount--;
+                if (specialCharCount <= 0) hasSpecialChars = true;
+            }
+            // if all requirements are met, return true
+            if (hasLowerCase && hasUpperCase && hasDigit && hasSpecialChars) return true;
+        }
+
+        // if at least one requirement is missing, return false
+        return false;
     }
 }

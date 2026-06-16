@@ -24,7 +24,6 @@ public class UserRegistrationTests {
     /**
      * Before every test, reset the database, restart the Javalin app, and create a new webClient and ObjectMapper
      * for interacting locally on the web.
-     * @throws InterruptedException
      */
     @BeforeEach
     public void setUp() throws InterruptedException {
@@ -33,7 +32,9 @@ public class UserRegistrationTests {
         app = SpringApplication.run(TodoApplication.class, args);
         Thread.sleep(500);
     }
-
+    /**
+     * After every test, exit the application.
+     */
     @AfterEach
     public void tearDown() throws InterruptedException {
     	Thread.sleep(500);
@@ -41,6 +42,7 @@ public class UserRegistrationTests {
     }
 
     /**
+     * TEST 1
      * Sending an http request to POST localhost:8080/auth/register when username does not exist in the system
      * 
      * Expected Response:
@@ -61,6 +63,7 @@ public class UserRegistrationTests {
     }
 
      /**
+     * TEST 2
      * Sending an http request to POST localhost:8080/auth/register when username already exists in system
      * 
      * Expected Response:
@@ -83,6 +86,7 @@ public class UserRegistrationTests {
     }
 
     /**
+     * TEST 3
      * Sending an http request to POST localhost:8080/auth/register when username is invalid
      * 
      * Expected Response:
@@ -103,6 +107,7 @@ public class UserRegistrationTests {
     }
     
     /**
+     * TEST 4
      * Sending an http request to POST localhost:8080/auth/register when password is invalid
      * 
      * Expected Response:
@@ -123,6 +128,7 @@ public class UserRegistrationTests {
     }
 
     /**
+     * TEST 5
      * Sending an http request to POST localhost:8080/auth/register when username AND password is invalid
      * 
      * Expected Response:

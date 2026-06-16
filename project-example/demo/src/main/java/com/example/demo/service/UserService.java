@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.User;
 import com.example.demo.exception.RegistrationFailure;
 import com.example.demo.repo.UserRepo;
 
@@ -70,6 +73,12 @@ public class UserService {
             if (hasLowerCase && hasUpperCase && hasDigit) return true;
         }
         throw new RegistrationFailure("Password requires all special characters");
+    }
+
+    public boolean isUnique(String credential){
+        Optional<User> userOptional = userRepo.findByUsername(credential);
+        // NOTE: we want isPresent to return false, because that means the username is actually unique, hence the "not" operator
+        return !userOptional.isPresent();
     }
 
 

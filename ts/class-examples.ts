@@ -123,9 +123,22 @@ interface SecondInterface {
 }
 
 class InterfaceImplementor implements BasicShape, SecondInterface {
+
     classSpecificField: number;
     constructor(public interfacePropertyOne: string, public interfacePropertyTwo: string){
         this.classSpecificField = 0;
+        
     }
     
 }
+
+/*
+    As a reminder: the class syntax we have been looking at is all ultimately
+    a convinience way of managing our JS objects in our code, which are themselves
+    fundamentally just key-value pairs. With this in mind, you should think
+    of interfaces as the same type of "type hinting" that can be used when
+    declaring a regular object in your code, but in this case it can also be used
+    to type hint your classes. It is not like interfaces in Java, however, in that
+    you can not share behavior with your interfaces. That is not their intent
+    in TS.
+*/

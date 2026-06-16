@@ -1,13 +1,14 @@
 package com.example.demo.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.RegistrationFailure;
 import com.example.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,15 @@ public class UserController {
     public ResponseEntity<Void> registerNewUser(@RequestBody User user){
         userService.registerUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    /*
+        NOTE: this exception handler is NOT universal: it will only trigger for any RegistrationFailiure
+        exceptions triggered by UserController code
+    */
+    @ExceptionHandler(RegistrationFailure.class)
+    public ResponseEntity<String> handleRegistrationFailure(RegistrationFailure exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
 }

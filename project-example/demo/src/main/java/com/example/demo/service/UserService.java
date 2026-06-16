@@ -48,6 +48,47 @@ public class UserService {
               in your application
     */
 
+
+    // NOTE: the controller handles putting together the response, so if this method executes without any
+    //       exceptions being thrown the controller will assume success and return the appropriate response
+    public void registerUser(User user){
+        // we have our helper methods, we will call them here
+
+        // first we can check the username is not null
+        if(isNull(user.getUsername())){
+            throw new RegistrationFailure("Username should not be empty");
+        }
+        // then we check it is the correct length
+        if(!isCorrectLength(user.getUsername())){
+            throw new RegistrationFailure("Username should be between 5 and 15 characters");
+        }
+        // finally we check it is unique against the database
+        if(!isUnique(user.getUsername())){
+            throw new RegistrationFailure("Username must be unique");
+        }
+
+        // next we check the password
+
+        // first we can check it is not null
+        if(isNull(user.getPassword())){
+            throw new RegistrationFailure("Password should not be empty");
+        }
+
+        // then we can check it is the correct length
+        if(!isCorrectLength(user.getPassword())){
+            throw new RegistrationFailure("Password should be between 5 and 15 characters");
+        }
+
+        // finally we can check the proper characters are in the password
+        if(!hasRequiredCharacters(user.getPassword())){
+            throw new RegistrationFailure("Password requires all special characters");
+        }
+
+        // if we have reached this point then we know the new credentials are valid and we can register the
+        // user
+        userRepo.save(user);
+    }
+
     /*
         There are multiple ways you could set up your helper validation methods: they can go in the service
         class itself, into a utility class, really whatever you can think of. Whatever decision you make, the
@@ -57,8 +98,8 @@ public class UserService {
         return 5 <= credential.length() && credential.length() <= 15;
     }
 
-    public boolean isNotNull(String credential){
-        return credential != null;
+    public boolean isNull(String credential){
+        return credential == null;
     }
 
     public boolean hasRequiredCharacters(String credential) {
@@ -72,7 +113,7 @@ public class UserService {
             if (Character.isDigit(c)) hasDigit = true;
             if (hasLowerCase && hasUpperCase && hasDigit) return true;
         }
-        throw new RegistrationFailure("Password requires all special characters");
+        return false;
     }
 
     public boolean isUnique(String credential){

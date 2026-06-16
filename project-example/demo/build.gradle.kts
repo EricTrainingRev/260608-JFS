@@ -1,5 +1,6 @@
 plugins {
 	java
+	// This plugin provides the "bootRun" gradle command which let's us build/start our apps
 	id("org.springframework.boot") version "4.1.0"
 	id("io.spring.dependency-management") version "1.1.7"
 }

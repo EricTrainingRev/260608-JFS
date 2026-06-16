@@ -26,12 +26,12 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    /* Constructor for AccountController
+    /* Endpoint to register a new account
     *
-    * @param accountService - service to manage business logic 
-    *                         of account registration and login.
+    * @param username - string of username, sent in body
+    * @param password - string of password, sent in body
     */
-    @PostMapping("/auth/register")
+    @PostMapping("api/auth/register")
     public ResponseEntity<User> createAccount(@RequestBody String username, @RequestBody String password) {
         return ResponseEntity.ok(accountService.createAccount(username, password));
     }

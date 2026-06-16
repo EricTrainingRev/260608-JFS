@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +16,9 @@ import com.example.demo.exception.RegistrationFailure;
 import com.example.demo.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -43,6 +49,30 @@ public class UserController {
     @ExceptionHandler(RegistrationFailure.class)
     public ResponseEntity<String> handleRegistrationFailure(RegistrationFailure exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException exception) {
+        log.error("Data integrity violation during registration", exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Could not complete registration: data conflict");
+    }
+
+    @ExceptionHandler(DataAccessResourceFailureException.class)
+    public ResponseEntity<String> handleResourceFailure(DataAccessResourceFailureException exception) {
+        log.error("Database resource failure during registration", exception);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Service temporarily unavailable, please try again later");
+    }
+
+    @ExceptionHandler(QueryTimeoutException.class)
+    public ResponseEntity<String> handleQueryTimeout(QueryTimeoutException exception) {
+        log.error("Query timeout during registration", exception);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Request timed out, please try again later");
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<String> handleGenericDataAccess(DataAccessException exception) {
+        log.error("Unexpected data access error during registration", exception);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred during registration");
     }
 
 }

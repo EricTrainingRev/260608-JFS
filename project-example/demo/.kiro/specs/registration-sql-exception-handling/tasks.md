@@ -6,8 +6,8 @@ Add four `@ExceptionHandler` methods to `UserController` to handle `DataIntegrit
 
 ## Tasks
 
-- [ ] 1. Add SQL exception handler methods to UserController
-  - [ ] 1.1 Add the `handleDataIntegrityViolation` exception handler method
+- [x] 1. Add SQL exception handler methods to UserController
+  - [x] 1.1 Add the `handleDataIntegrityViolation` exception handler method
     - Import `DataIntegrityViolationException` from `org.springframework.dao`
     - Add an `@ExceptionHandler(DataIntegrityViolationException.class)` method to `UserController`
     - The method should accept `DataIntegrityViolationException` as its parameter
@@ -15,7 +15,7 @@ Add four `@ExceptionHandler` methods to `UserController` to handle `DataIntegrit
     - Return `ResponseEntity<String>` with HTTP 409 Conflict and body: `"Could not complete registration: data conflict"`
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ] 1.2 Add the `handleResourceFailure` exception handler method
+  - [x] 1.2 Add the `handleResourceFailure` exception handler method
     - Import `DataAccessResourceFailureException` from `org.springframework.dao`
     - Add an `@ExceptionHandler(DataAccessResourceFailureException.class)` method to `UserController`
     - The method should accept `DataAccessResourceFailureException` as its parameter
@@ -23,7 +23,7 @@ Add four `@ExceptionHandler` methods to `UserController` to handle `DataIntegrit
     - Return `ResponseEntity<String>` with HTTP 503 Service Unavailable and body: `"Service temporarily unavailable, please try again later"`
     - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-  - [ ] 1.3 Add the `handleQueryTimeout` exception handler method
+  - [x] 1.3 Add the `handleQueryTimeout` exception handler method
     - Import `QueryTimeoutException` from `org.springframework.dao`
     - Add an `@ExceptionHandler(QueryTimeoutException.class)` method to `UserController`
     - The method should accept `QueryTimeoutException` as its parameter
@@ -31,7 +31,7 @@ Add four `@ExceptionHandler` methods to `UserController` to handle `DataIntegrit
     - Return `ResponseEntity<String>` with HTTP 503 Service Unavailable and body: `"Request timed out, please try again later"`
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-  - [ ] 1.4 Add the `handleGenericDataAccess` catch-all exception handler method
+  - [x] 1.4 Add the `handleGenericDataAccess` catch-all exception handler method
     - Import `DataAccessException` from `org.springframework.dao`
     - Add an `@ExceptionHandler(DataAccessException.class)` method to `UserController`
     - The method should accept `DataAccessException` as its parameter

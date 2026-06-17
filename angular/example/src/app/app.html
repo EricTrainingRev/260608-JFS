@@ -10,3 +10,53 @@
   the viewport of the browser
 -->
 <h1>{{ message() }}</h1>
+
+<!-- 
+  In Angular you have two ways besides interporlation of referencing data
+  from your component in your HTML template via one way data binding: property and event binding
+  - property binding -> you reference the attribute you want to augment in
+                        your element within square brackets and then in the
+                        value section you reference the property of your component
+                        you want to use as the value
+  - event binding -> you reference the event you want with parenthesis and then set its value
+                     as whatever function you want called when the event triggers                      
+-->
+
+<!-- this button and its disabled attribute are controlled by the isDisabled property of the component -->
+<button [disabled]="isDisabled()">This button should be disabled</button>
+
+<!-- everytime this button is clicked it toggles the value of isDisabled, which changes the state of the button above -->
+<button (click)="toggleDisabledButton()">toggle disabled button</button>
+
+<!-- 
+  There will be times when you will want two-way data binding: think of when filling out a registration 
+  form: as the user enters their credentials you may want to have some code that checks the credentials
+  follow whatever business rules you have. In this case, the use input needs to be connected to a field
+  in the component, and you need to be able to pass back any checks or messages you need to the user
+  based on the data in the component. In these cases you can use the NgModel attribute to facilitate
+  two way data binding
+-->
+<input type="text" placeholder="Enter some value" [(ngModel)]="twoWayData">
+<p>{{ twoWayData }}</p>
+
+<!-- 
+  In the past you used to utilize special directives that would allow you to utilize control-flow like
+  syntax directly in your HTML template (if/else statements, loops, switch statements). In modern Angular
+  you now use a special template syntax that is much easier to read and use to accomplish the same thing
+-->
+
+<!-- This will only render the content of the if statement if the isVisible property is true -->
+@if (isVisible) {
+  <p>{{conditionalText}}</p>
+}
+<!-- can chain @else if and @else as well -->
+<button (click)="toggleIsVisible()">toggle isvisible</button>
+
+<!-- here we create a list item for each pet name in the myPetnames collection -->
+<h3>My Pets</h3>
+<ul>
+  @for (petName of myPetNames; track $index) {
+    <li>{{petName}}</li>
+  }
+</ul>
+

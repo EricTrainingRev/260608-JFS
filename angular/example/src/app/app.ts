@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 /*
   Components are the fundamental building blocks of Angular. You don't just
@@ -20,7 +21,7 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -35,4 +36,20 @@ export class App {
                          here
   */
     readonly message = signal("but you should really do this");
+
+    isDisabled = signal(true);
+
+    toggleDisabledButton(){
+      this.isDisabled.set(!this.isDisabled());
+    }
+
+    twoWayData = "";
+
+    conditionalText = "This only renders when isVisible is set to true";
+    isVisible = true;
+    toggleIsVisible(){
+      this.isVisible = !this.isVisible;
+    }
+
+    myPetNames = ["Blue", "Wally", "Big Boy", "Carl"];
 }

@@ -6,6 +6,8 @@ import com.theblind.todo.Entity.User;
 import com.theblind.todo.Exception.RegistrationFailure;
 import com.theblind.todo.Repo.AccountRepo;
 import com.theblind.todo.Service.AccountService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 
@@ -16,20 +18,27 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class AccountService {
+    @Autowired
     private final AccountRepo accountRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
     * createAccount - Creates a new account with the given username and password
     *
     * @param username - the username for the new account
     * @param password - the password for the new account
-    * @return the newly created Account object
+    * @return the newly created Account object, is null if invalid (however, 
+    *         a RegistrationFailure exception will be thrown instead)
+
     */
     public User createAccount(String username, String password) {
         User newAccount = null;
 
-        if (usernameValidator(username) && passwordValidator(password)) {
-            newAccount = new User(username, password);
+        if (usernameValidator(username) && passwordValidator(password)) {    
+            String encodedPassword = passwordEncoder.encode(password);        
+            newAccount = new User(username, encodedPassword);
             accountRepository.save(newAccount);
         }
 
@@ -40,14 +49,13 @@ public class AccountService {
      * usernameValidator - this method checks whether a given username is valid
      * 
      * @param username
-     * @return true if username is not blank, does not contain whitespace, 
+     * @return true if username is not null, does not contain whitespace, 
      *         is not a duplicate, and is between 5 and 15 characters long (inclusive)
     */
-    private boolean usernameValidator(String username) {
+    public boolean usernameValidator(String username) {
         // flags for requirements
         boolean lengthFlag = isCorrectLength(username), noWhiteSpaceFlag = !hasWhiteSpace(username), 
             notNullFlag = !isNull(username), uniqueFlag = isUnique(username);
-
 
         // if all flags are set, valid username
         if (notNullFlag && uniqueFlag && noWhiteSpaceFlag && lengthFlag) return true;
@@ -73,7 +81,7 @@ public class AccountService {
      *         letter, at least one lowercase letter, at least one digit, 
      *         and is between 5 and 15 characters long (inclusive)
     */
-    private boolean passwordValidator(String password) {
+    public boolean passwordValidator(String password) {
         // flags for requirements
         boolean charsFlag = hasRequiredCharacters(password), lengthFlag = isCorrectLength(password), 
             noWhiteSpaceFlag = !hasWhiteSpace(password), notNullFlag = !isNull(password);

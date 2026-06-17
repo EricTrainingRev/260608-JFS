@@ -147,4 +147,47 @@ public class UserRegistrationTests {
         int status = response.statusCode();
         Assertions.assertEquals(400, status, "Expected Status Code 400 - Actual Code was: " + status);
     }
+
+    /**
+     * TEST 6
+     * Sending an http request to POST localhost:8080/auth/register when username is null
+     * 
+     * Expected Response:
+     *  Status Code: 400
+     */
+    @Test
+    public void registerUserNullUsername() throws IOException, InterruptedException {
+        String json = "{\"password\":\"AbcDe**123\"}";
+    	HttpRequest postRequest = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/auth/register"))
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .header("Content-Type", "application/json")
+                .build();
+        HttpResponse<String> response = webClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        int status = response.statusCode();
+        Assertions.assertEquals(400, status, "Expected Status Code 400 - Actual Code was: " + status);
+    }
+
+    /**
+     * TEST 7
+     * Sending an http request to POST localhost:8080/auth/register when password is null
+     * 
+     * Expected Response:
+     *  Status Code: 400
+     */
+    @Test
+    public void registerUserNullPassword() throws IOException, InterruptedException {
+        String json = "{\"username\":\"john_doe\"}";
+    	HttpRequest postRequest = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/auth/register"))
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .header("Content-Type", "application/json")
+                .build();
+        HttpResponse<String> response = webClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response.body());
+        int status = response.statusCode();
+        Assertions.assertEquals(400, status, "Expected Status Code 400 - Actual Code was: " + status);
+    }
+
 }

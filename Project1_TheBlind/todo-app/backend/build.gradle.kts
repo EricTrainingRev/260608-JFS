@@ -35,6 +35,7 @@ dependencies {
 	testImplementation("com.h2database:h2:2.4.240")
 	// security implementation
     implementation("org.springframework.boot:spring-boot-starter-security")
+	testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.withType<Test> {

@@ -11,5 +11,4 @@ import com.theblind.todo.Entity.User;
 @Repository
 public interface AccountRepo extends JpaRepository<User, UUID> {
     Optional<User> findByUsername(String username);
-    Optional<User> findAccountByUsernameAndPassword(String username, String password);
 }

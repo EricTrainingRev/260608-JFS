@@ -38,7 +38,7 @@ public class AccountController {
     * Endpoint to register a new account
     *
     * @param user - a User object, with a username and password, from the request body
-    * @return ResponseEntity object with new user info in body of response
+    * @return ResponseEntity object with new user info in body of response (201 CREATED)
     */
     @PostMapping("/auth/register")
     public ResponseEntity<User> createAccount(@RequestBody User user) {
@@ -49,8 +49,22 @@ public class AccountController {
         } else if (user.getPassword() == null) {
            throw new RegistrationFailure("Password cannot be null");
         }
+
         User newUser = accountService.createAccount(user.getUsername(), user.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+    /**
+    * Endpoint to have a user login and become authenticated
+    *
+    * @param user - a User object, with a username and password, from the request body
+    * @return ResponseEntity object with existing user info in body of response (200 OK)
+    */
+    @PostMapping("/auth/login")
+    public ResponseEntity<User> loginAccount(@RequestBody User user) {
+        User existingUser = accountService.loginAccount(user.getUsername(), user.getPassword());
+        
+        return ResponseEntity.status(HttpStatus.OK).body(existingUser);
     }
 
     /** 

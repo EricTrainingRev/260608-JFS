@@ -30,7 +30,7 @@ public class AccountService {
     *
     * @param username - the username for the new account
     * @param password - the password for the new account
-    * @return the newly created Account object, is null if invalid (however, 
+    * @return the newly created User object, is null if invalid (however, 
     *         a RegistrationFailure exception will be thrown instead)
     */
     public User createAccount(String username, String password) {
@@ -43,6 +43,31 @@ public class AccountService {
         }
 
         return newAccount;
+    }
+
+
+    /**
+    * loginAccount - Creates a new account with the given username and password
+    *
+    * @param username - the username for an existing account
+    * @param password - the password for an existing account
+    * @return a User object of an existing account with 
+    *         matching credentials, is null if not found (however, 
+    *         a LoginFailure exception will be thrown instead)
+    */
+    public User loginAccount(String username, String password) {
+        Optional<User> optionalAccount = accountRepository.findByUsername(username);
+        User loggedInAccount = null;
+
+        if (optionalAccount.isPresent()) {
+            if (passwordEncoder.matches(password, optionalAccount.get().getPassword())) {
+                loggedInAccount = optionalAccount.get();
+            }
+        }
+
+        if (loggedInAccount == null) throw new RegistrationFailure("Credentials do not match");
+
+        return loggedInAccount;
     }
 
     /**

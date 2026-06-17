@@ -8,12 +8,13 @@ import com.theblind.todo.Repo.AccountRepo;
 import com.theblind.todo.Service.AccountService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.*;
+import com.theblind.todo.Exception.GlobalExceptionHandler;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +32,6 @@ public class AccountService {
     * @param password - the password for the new account
     * @return the newly created Account object, is null if invalid (however, 
     *         a RegistrationFailure exception will be thrown instead)
-
     */
     public User createAccount(String username, String password) {
         User newAccount = null;

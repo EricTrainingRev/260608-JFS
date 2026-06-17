@@ -25,7 +25,7 @@ public class GlobalSecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())  // Disable CSRF for REST APIs
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/register").permitAll()
+                .requestMatchers("/auth/register", "/auth/login").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults())

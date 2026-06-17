@@ -9,6 +9,15 @@ public class RegistrationFailure extends RuntimeException {
     * RegistrationFailure - a custom exception to be thrown when user registration fails
     *
     * @param generic_message - a string containing a generic message describing the error
+    */
+    public RegistrationFailure(String message) {
+        super(message);
+    }
+
+    /**
+    * RegistrationFailure - a custom exception to be thrown when user registration fails
+    *
+    * @param generic_message - a string containing a generic message describing the error
     * @param invalidRequirementsList - a list containing key-value pairs. The key is a
     *                                  string representing the name of the requirement, 
     *                                  and the value is a boolean representing whether the 

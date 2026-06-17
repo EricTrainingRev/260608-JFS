@@ -43,13 +43,10 @@ public class AccountController {
     public ResponseEntity<User> createAccount(@RequestBody User user) {
         // if username is null, return 400 error 
         // (will return 401 if not checked in controller)
-        // (can't check for null in entity because it's not a requirement for the database but is a requirement for the api)
         if (user.getUsername() == null) {
-            List<Map.Entry<String, Boolean>> invalidRequirementList = List.of();
-            throw new RegistrationFailure("Username cannot be null", invalidRequirementList);
+            throw new RegistrationFailure("Username cannot be null");
         } else if (user.getPassword() == null) {
-            List<Map.Entry<String, Boolean>> invalidRequirementList = List.of();
-            throw new RegistrationFailure("Password cannot be null", invalidRequirementList);
+           throw new RegistrationFailure("Password cannot be null");
         }
         User newUser = accountService.createAccount(user.getUsername(), user.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);

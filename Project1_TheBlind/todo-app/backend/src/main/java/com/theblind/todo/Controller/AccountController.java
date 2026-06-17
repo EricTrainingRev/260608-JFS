@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class AccountController {
     private final AccountService accountService;
 
@@ -39,7 +40,7 @@ public class AccountController {
     * @param user - a User object, with a username and password, from the request body
     * @return ResponseEntity object with new user info in body of response
     */
-    @PostMapping("auth/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<User> createAccount(@RequestBody User user) {
         // if username is null, return 400 error 
         // (will return 401 if not checked in controller)

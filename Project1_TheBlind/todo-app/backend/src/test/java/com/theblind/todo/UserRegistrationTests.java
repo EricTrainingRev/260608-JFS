@@ -20,6 +20,7 @@ import static org.springframework.boot.SpringApplication.run;
 public class UserRegistrationTests {
 	ApplicationContext app;
     HttpClient webClient;
+    private final String REGISTRATION_API = "http://localhost:8080/api/auth/register";
 
     /**
      * Before every test, reset the database, restart the Javalin app, and create a new webClient and ObjectMapper
@@ -52,7 +53,7 @@ public class UserRegistrationTests {
     public void registerUserSuccessful() throws IOException, InterruptedException {
         String json = "{\"username\":\"john_doe\",\"password\":\"AbcDe**123\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();
@@ -73,7 +74,7 @@ public class UserRegistrationTests {
     public void registerUserDuplicateUsername() throws IOException, InterruptedException {
     	String json = "{\"username\":\"john_doe\",\"password\":\"AbcDe**123\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();
@@ -96,7 +97,7 @@ public class UserRegistrationTests {
     public void registerUserInvalidUsername() throws IOException, InterruptedException {
         String json = "{\"username\":\"john\",\"password\":\"AbcDe**123\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();
@@ -117,7 +118,7 @@ public class UserRegistrationTests {
     public void registerUserInvalidPassword() throws IOException, InterruptedException {
         String json = "{\"username\":\"john_doe\",\"password\":\"abc\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();
@@ -138,7 +139,7 @@ public class UserRegistrationTests {
     public void registerUserInvalidUsernameAndPassword() throws IOException, InterruptedException {
         String json = "{\"username\":\"john\",\"password\":\"abc\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();
@@ -159,7 +160,7 @@ public class UserRegistrationTests {
     public void registerUserNullUsername() throws IOException, InterruptedException {
         String json = "{\"password\":\"AbcDe**123\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();
@@ -180,7 +181,7 @@ public class UserRegistrationTests {
     public void registerUserNullPassword() throws IOException, InterruptedException {
         String json = "{\"username\":\"john_doe\"}";
     	HttpRequest postRequest = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/auth/register"))
+                .uri(URI.create(REGISTRATION_API))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .header("Content-Type", "application/json")
                 .build();

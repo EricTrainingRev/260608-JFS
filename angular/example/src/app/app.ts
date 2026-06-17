@@ -52,4 +52,6 @@ export class App {
     }
 
     myPetNames = ["Blue", "Wally", "Big Boy", "Carl"];
+
+    switchInput = 3
 }

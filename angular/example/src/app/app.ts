@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SecondComponent } from './second-component/second-component';
+import { DirectiveComponent } from "./directive-component/directive-component";
 
 /*
   Components are the fundamental building blocks of Angular. You don't just
@@ -22,7 +23,7 @@ import { SecondComponent } from './second-component/second-component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, SecondComponent],
+  imports: [RouterOutlet, FormsModule, SecondComponent, DirectiveComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

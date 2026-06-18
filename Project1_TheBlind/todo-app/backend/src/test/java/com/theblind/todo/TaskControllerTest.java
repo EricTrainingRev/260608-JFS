@@ -23,6 +23,10 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import com.theblind.todo.TodoApplication;
+
 @WebMvcTest(TaskController.class)
 @DisplayName("TaskController web layer tests")
 class TaskControllerTest {

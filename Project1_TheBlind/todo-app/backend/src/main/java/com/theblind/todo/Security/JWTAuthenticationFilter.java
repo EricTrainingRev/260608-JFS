@@ -15,14 +15,19 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.stereotype.Component;
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
+    @Autowired
     private final HandlerExceptionResolver handlerExceptionResolver;
-    private final JWTService jwtService;
+
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
     private final UserDetailsService userDetailsService;
 
     public JWTAuthenticationFilter(

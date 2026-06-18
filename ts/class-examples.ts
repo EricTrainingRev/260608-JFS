@@ -142,3 +142,23 @@ class InterfaceImplementor implements BasicShape, SecondInterface {
     you can not share behavior with your interfaces. That is not their intent
     in TS.
 */
+
+/*
+    You can also declare functions as part of your interface: you give it
+    a name, type hint any parameters, and type hint the expected return
+    type. You can also make use of arrow functions for your type hinting
+    as well
+*/
+
+interface FunctionExamples {
+    standardReference(paramOne: string): void,
+    arrowExample: (paramTwo: number) => void
+}
+
+class FunctionExampleClass implements FunctionExamples{
+    arrowExample: (paramTwo: number) => void = (paramTwo) => console.log(paramTwo);
+    standardReference(paramOne: string): void {
+        console.log(paramOne);
+    }
+    
+}

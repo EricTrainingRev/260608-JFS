@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.theblind.todo.Exception.GlobalExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.util.Map;
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class AccountService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private final AuthenticationManager authenticationManager;
 
     /**
     * createAccount - Creates a new account with the given username and password
@@ -62,6 +67,12 @@ public class AccountService {
         if (optionalAccount.isPresent()) {
             if (passwordEncoder.matches(password, optionalAccount.get().getPassword())) {
                 loggedInAccount = optionalAccount.get();
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                username,
+                                password
+                        )
+                );
             }
         }
 

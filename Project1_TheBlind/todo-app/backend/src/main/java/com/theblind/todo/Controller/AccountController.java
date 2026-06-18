@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import com.theblind.todo.Service.JWTService;
+import com.theblind.todo.Response.LoginResponse;
 
 import java.util.UUID;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.Collections;
 @RequestMapping("/api/auth")
 public class AccountController {
     private final AccountService accountService;
+    private final JWTService jwtService;
 
     /**
     *  Constructor for AccountController
@@ -31,8 +34,9 @@ public class AccountController {
     *                         of account registration and login.
     */
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, JWTService jwtService) {
         this.accountService = accountService;
+        this.jwtService = jwtService;
     }
 
     /**
@@ -62,10 +66,15 @@ public class AccountController {
     * @return ResponseEntity object with existing user info in body of response (200 OK)
     */
     @PostMapping("/login")
-    public ResponseEntity<User> loginAccount(@RequestBody User user) {
+    public ResponseEntity<LoginResponse> loginAccount(@RequestBody User user) {
         User existingUser = accountService.loginAccount(user.getUsername(), user.getPassword());
+        String jwtToken = jwtService.generateToken(existingUser);
+
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setToken(jwtToken);
+        loginResponse.setExpiresIn(jwtService.getExpirationTime());
         
-        return ResponseEntity.status(HttpStatus.OK).body(existingUser);
+        return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
 
     /** 

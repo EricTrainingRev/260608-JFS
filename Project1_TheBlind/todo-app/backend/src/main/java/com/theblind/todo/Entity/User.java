@@ -45,6 +45,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    // for JWT Authentication
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -58,25 +59,10 @@ public class User implements UserDetails {
     public String getPassword() {
         return password;
     }
-    
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
+    // is JSON Web Token still active (true) or expired (false)?
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-    
 }

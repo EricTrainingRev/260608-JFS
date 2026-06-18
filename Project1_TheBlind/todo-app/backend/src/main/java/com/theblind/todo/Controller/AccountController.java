@@ -17,9 +17,10 @@ import java.util.UUID;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 public class AccountController {
     private final AccountService accountService;
 
@@ -40,7 +41,7 @@ public class AccountController {
     * @param user - a User object, with a username and password, from the request body
     * @return ResponseEntity object with new user info in body of response (201 CREATED)
     */
-    @PostMapping("/auth/register")
+    @PostMapping("/register")
     public ResponseEntity<User> createAccount(@RequestBody User user) {
         // if username is null, return 400 error 
         // (will return 401 if not checked in controller)
@@ -60,7 +61,7 @@ public class AccountController {
     * @param user - a User object, with a username and password, from the request body
     * @return ResponseEntity object with existing user info in body of response (200 OK)
     */
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     public ResponseEntity<User> loginAccount(@RequestBody User user) {
         User existingUser = accountService.loginAccount(user.getUsername(), user.getPassword());
         

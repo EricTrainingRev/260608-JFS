@@ -3,8 +3,11 @@ package com.theblind.todo.Controller;
 import com.theblind.todo.Entity.User;
 import com.theblind.todo.Repo.AccountRepo;
 import com.theblind.todo.Service.AccountService;
-import com.theblind.todo.Exception.RegistrationFailure;
+import com.theblind.todo.Service.JWTService;
+import com.theblind.todo.Exception.RegistrationFailureException;
+import com.theblind.todo.Exception.LoginFailureException;
 import com.theblind.todo.Exception.GlobalExceptionHandler;
+import com.theblind.todo.Response.LoginResponse;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import com.theblind.todo.Service.JWTService;
-import com.theblind.todo.Response.LoginResponse;
 
 import java.util.UUID;
 import java.util.Map;
@@ -43,16 +44,17 @@ public class AccountController {
     * Endpoint to register a new account
     *
     * @param user - a User object, with a username and password, from the request body
+    * 
     * @return ResponseEntity object with new user info in body of response (201 CREATED)
+    * @throws RegistrationFailure exception if username or password do not fit requirements
     */
     @PostMapping("/register")
-    public ResponseEntity<User> createAccount(@RequestBody User user) {
+    public ResponseEntity<User> createAccount(@RequestBody User user) throws RegistrationFailureException {
         // if username is null, return 400 error 
         // (will return 401 if not checked in controller)
-        if (user.getUsername() == null) {
-            throw new RegistrationFailure("Username cannot be null");
-        } else if (user.getPassword() == null) {
-           throw new RegistrationFailure("Password cannot be null");
+        // (maybe fix with an SQL Exception Handler?)
+        if (user.getUsername() == null || user.getPassword() == null) {
+           throw new RegistrationFailureException("Either username or password is null");
         }
 
         User newUser = accountService.createAccount(user.getUsername(), user.getPassword());
@@ -63,10 +65,12 @@ public class AccountController {
     * Endpoint to have a user login and become authenticated
     *
     * @param user - a User object, with a username and password, from the request body
+    * 
     * @return ResponseEntity object with existing user info in body of response (200 OK)
+    * @throws LoginFailure exception if credentials don't match any user in database
     */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginAccount(@RequestBody User user) {
+    public ResponseEntity<LoginResponse> loginAccount(@RequestBody User user) throws LoginFailureException {
         User existingUser = accountService.loginAccount(user.getUsername(), user.getPassword());
         String jwtToken = jwtService.generateToken(existingUser);
 
@@ -81,10 +85,23 @@ public class AccountController {
     * Exception handler for RegistrationFailure exceptions in this controller.
     *
     * @param exception - a RegistrationFailure exception (user inputted bad username or password)
+    * 
     * @return a response entity with a message and a 400 status code
     */
-    @ExceptionHandler(RegistrationFailure.class)
-    public ResponseEntity<String> handleRegistrationFailure(RegistrationFailure exception) {
+    @ExceptionHandler(RegistrationFailureException.class)
+    public ResponseEntity<String> handleRegistrationFailureException(RegistrationFailureException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    /** 
+    * Exception handler for LoginFailure exceptions in this controller.
+    *
+    * @param exception - a LoginFailure exception (credentials do not match)
+    * 
+    * @return a response entity with a message and a 400 status code
+    */
+    @ExceptionHandler(LoginFailureException.class)
+    public ResponseEntity<String> handleLoginFailure(LoginFailureException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 }

@@ -1,17 +1,20 @@
 package com.theblind.todo.Service;
 
+import com.theblind.todo.Entity.User;
+import com.theblind.todo.Repo.AccountRepo;
+import com.theblind.todo.Exception.RegistrationFailureException;
+import com.theblind.todo.Exception.LoginFailureException;
+import com.theblind.todo.Exception.GlobalExceptionHandler;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.theblind.todo.Entity.User;
-import com.theblind.todo.Exception.RegistrationFailure;
-import com.theblind.todo.Repo.AccountRepo;
 import com.theblind.todo.Service.AccountService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.theblind.todo.Exception.GlobalExceptionHandler;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.ArrayList;
@@ -35,10 +38,12 @@ public class AccountService {
     *
     * @param username - the username for the new account
     * @param password - the password for the new account
+    * 
     * @return the newly created User object, is null if invalid (however, 
     *         a RegistrationFailure exception will be thrown instead)
+    * @throws RegistrationFailure exception if username or password do not fit requirements
     */
-    public User createAccount(String username, String password) {
+    public User createAccount(String username, String password) throws RegistrationFailureException {
         User newAccount = null;
 
         if (usernameValidator(username) && passwordValidator(password)) {    
@@ -52,21 +57,22 @@ public class AccountService {
 
 
     /**
-    * loginAccount - Creates a new account with the given username and password
+    * loginAccount - Checks for existing user and authenticates user's session
     *
     * @param username - the username for an existing account
     * @param password - the password for an existing account
-    * @return a User object of an existing account with 
-    *         matching credentials, is null if not found (however, 
-    *         a LoginFailure exception will be thrown instead)
+    * 
+    * @return a User object of an existing account with matching credentials
+    * @throws LoginFailure exception if credentials don't match any user in database
     */
-    public User loginAccount(String username, String password) {
+    public User loginAccount(String username, String password) throws LoginFailureException {
         Optional<User> optionalAccount = accountRepository.findByUsername(username);
         User loggedInAccount = null;
 
         if (optionalAccount.isPresent()) {
             if (passwordEncoder.matches(password, optionalAccount.get().getPassword())) {
                 loggedInAccount = optionalAccount.get();
+                // authentication happens after user is confirmed to exist in databaseS
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(
                                 username,
@@ -76,7 +82,7 @@ public class AccountService {
             }
         }
 
-        if (loggedInAccount == null) throw new RegistrationFailure("Credentials do not match");
+        if (loggedInAccount == null) throw new LoginFailureException("Credentials do not match");
 
         return loggedInAccount;
     }
@@ -85,10 +91,12 @@ public class AccountService {
      * usernameValidator - this method checks whether a given username is valid
      * 
      * @param username
+     * 
      * @return true if username is not null, does not contain whitespace, 
      *         is not a duplicate, and is between 5 and 15 characters long (inclusive)
+     * @throws RegistrationFailure exception if username or password do not fit requirements
     */
-    public boolean usernameValidator(String username) {
+    public boolean usernameValidator(String username) throws RegistrationFailureException {
         // flags for requirements
         boolean lengthFlag = isCorrectLength(username), noWhiteSpaceFlag = !hasWhiteSpace(username), 
             notNullFlag = !isNull(username), uniqueFlag = isUnique(username);
@@ -96,28 +104,34 @@ public class AccountService {
         // if all flags are set, valid username
         if (notNullFlag && uniqueFlag && noWhiteSpaceFlag && lengthFlag) return true;
 
-        // if not, return error
-        String genericMessage = "Username is not valid";
-        List<Map.Entry<String, Boolean>> invalidRequirementList = List.of(
-            Map.entry("Must be between 5 and 15 characters long (inclusive)", lengthFlag),
-            Map.entry("Must not contain whitespace", noWhiteSpaceFlag),
-            Map.entry("Must not be null", notNullFlag),
-            Map.entry("Must be unique (username already exists)", uniqueFlag)
+        // if not, return error (give specific feedback for violated requirements)
+        List<Map.Entry<Boolean, String>> invalidRequirementsList = List.of(
+            Map.entry(lengthFlag, "must be between 5 and 15 characters long (inclusive)"),
+            Map.entry(noWhiteSpaceFlag, "must not contain whitespace"),
+            Map.entry(notNullFlag, "must not be null"),
+            Map.entry(uniqueFlag, "must be unique (username already exists)")
         );
 
-        throw new RegistrationFailure(genericMessage, invalidRequirementList);
+        String message = "The username is invalid. Here are the following requirements:";
+        for (Map.Entry<Boolean, String> entry : invalidRequirementsList) {
+            if (entry.getKey() == false) message = message + "\n-" + entry.getValue();
+        }
+
+        throw new RegistrationFailureException(message);
     }
 
     /**
      * passwordValidator - this method checks whether a given password
      * 
      * @param password - a string
+     * 
      * @return true if password is not null, does not contain whitespace, 
      *         contains at least two special characters, at least one uppercase
      *         letter, at least one lowercase letter, at least one digit, 
      *         and is between 5 and 15 characters long (inclusive)
+     * @throws RegistrationFailure exception if username or password do not fit requirements
     */
-    public boolean passwordValidator(String password) {
+    public boolean passwordValidator(String password) throws RegistrationFailureException {
         // flags for requirements
         boolean charsFlag = hasRequiredCharacters(password), lengthFlag = isCorrectLength(password), 
             noWhiteSpaceFlag = !hasWhiteSpace(password), notNullFlag = !isNull(password);
@@ -125,16 +139,20 @@ public class AccountService {
         // if all flags set, valid password
         if (notNullFlag && noWhiteSpaceFlag && charsFlag && lengthFlag) return true;
 
-        // if not, return error
-        String genericMessage = "Password is not valid";
-        List<Map.Entry<String, Boolean>> invalidRequirementList = List.of(
-            Map.entry("Must contain at least one uppercase, one lowercase, one numeric, and two special characters", charsFlag),
-            Map.entry("Must be between 5 and 15 characters long (inclusive)", lengthFlag),
-            Map.entry("Must not contain whitespace", noWhiteSpaceFlag),
-            Map.entry("Must not be null", notNullFlag)
+        // if not, return error (give specific feedback for violated requirements)
+        List<Map.Entry<Boolean, String>> invalidRequirementsList = List.of(
+            Map.entry(charsFlag, "Must contain at least one uppercase, one lowercase, one numeric, and two special characters"),
+            Map.entry(lengthFlag, "Must be between 5 and 15 characters long (inclusive)"),
+            Map.entry(noWhiteSpaceFlag, "Must not contain whitespace"),
+            Map.entry(notNullFlag, "Must not be null")
         );
 
-        throw new RegistrationFailure(genericMessage, invalidRequirementList);
+        String message = "The password is invalid. Here are the following requirements:";
+        for (Map.Entry<Boolean, String> entry : invalidRequirementsList) {
+            if (entry.getKey() == false) message = message + "\n-" + entry.getValue();
+        }
+
+        throw new RegistrationFailureException(message);
     }
 
     // check if credential is already in database

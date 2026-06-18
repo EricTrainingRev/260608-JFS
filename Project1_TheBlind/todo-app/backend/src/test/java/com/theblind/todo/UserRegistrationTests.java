@@ -15,12 +15,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
 import com.theblind.todo.TodoApplication;
+
 import static org.springframework.boot.SpringApplication.run;
 
 public class UserRegistrationTests {
 	ApplicationContext app;
     HttpClient webClient;
+
     private final String REGISTRATION_API = "http://localhost:8080/api/auth/register";
+
     private final String JSON_JOHN_DOE_CORRECT = "{\"username\":\"john_doe\",\"password\":\"AbcDe**123\"}";
     private final String JSON_JOHN_DOE_INVALID_NAME = "{\"username\":\"john\",\"password\":\"AbcDe**123\"}";
     private final String JSON_JOHN_DOE_INVALID_PASSWORD = "{\"username\":\"john_doe\",\"password\":\"Abc\"}";

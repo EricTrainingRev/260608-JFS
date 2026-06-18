@@ -33,5 +33,4 @@ public class GlobalExceptionHandler extends RuntimeException{
         pd.setTitle("Requested Resource Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
     }
-
 }

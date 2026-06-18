@@ -1,7 +1,7 @@
-package com.theblind.todo.Security;
-
+package com.theblind.todo.Config;
 
 import com.theblind.todo.Repo.AccountRepo;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,17 +17,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 @Configuration
 @EnableWebSecurity
 public class GlobalSecurityConfig {
-    @Autowired
-    private final AuthenticationProvider authenticationProvider;
-
-    @Autowired
-    private final JWTAuthenticationFilter jwtAuthenticationFilter;
-
-    public GlobalSecurityConfig(JWTAuthenticationFilter jwtAuthenticationFilter,  AuthenticationProvider authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
-
     // Disabling CSRF in order to permit API requests
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

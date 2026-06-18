@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/*
+* UserDetails is an interface provided by Spring Security which
+* contains methods to contain and etrieve user information for authentication.
+*/
 @Data
 @NoArgsConstructor
 @Entity
@@ -45,17 +49,23 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    // for JWT Authentication
+    /* Overridden functions from UserDetails
+    *
+    *  Allows for JWT Authentication
+     */
+    // Gives list of permissions user has (will be unused)
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
+    // retrieves username
     @Override
     public String getUsername() {
         return username;
     }
 
+    // retrieves password
     public String getPassword() {
         return password;
     }

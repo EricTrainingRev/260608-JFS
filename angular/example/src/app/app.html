@@ -71,3 +71,13 @@
     <p>no case matched</p>
   }
 }
+
+<!-- 
+  If you want to render a component inside of another component (creating a
+  parent - child relationship between them) you reference the component by using its "selector"
+  value in tags
+-->
+<app-second-component 
+  [message]="valueForChildElement" 
+  (childEventEmitter)="respondToChildEvent()" 
+  (childEventEmitterWithData)="respondToChildStringData($event)"></app-second-component>

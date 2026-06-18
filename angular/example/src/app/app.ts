@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { SecondComponent } from './second-component/second-component';
 
 /*
   Components are the fundamental building blocks of Angular. You don't just
@@ -21,7 +22,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, SecondComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -54,4 +55,14 @@ export class App {
     myPetNames = ["Blue", "Wally", "Big Boy", "Carl"];
 
     switchInput = 3
+
+    valueForChildElement = "This message comes from the parent";
+
+    respondToChildEvent(){
+      alert("This alert was triggered by a child component event");
+    }
+
+    respondToChildStringData(dataFromChild: string){
+      alert(`Data from the child element: ${dataFromChild}`);
+    }
 }

@@ -20,4 +20,18 @@ public class GlobalExceptionHandler extends RuntimeException{
         pd.setTitle("Invalid Request");
         return ResponseEntity.badRequest().body(pd);
     }
+
+    /**
+     * Handles resource not found errors.
+     *
+     * @param e the thrown {@link ResourceNotFoundException}
+     * @return ResponseEntity with HTTP status 404 (Not Found) and a problem detail body
+     */
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ProblemDetail> handleResourceNotFound(ResourceNotFoundException e) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        pd.setTitle("Requested Resource Not Found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
+    }
+
 }

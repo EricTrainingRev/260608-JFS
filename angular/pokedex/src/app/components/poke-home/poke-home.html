@@ -1,5 +1,18 @@
 <h1>Welcome to the Pokedex!</h1>
 <p>Search for a pokemon by its name or id to see its information</p>
 <app-poke-search></app-poke-search>
-<app-poke-name></app-poke-name>
-<app-poke-sprite></app-poke-sprite>
+<nav>
+    <a routerLink="">Pokemon Home </a>
+    <a routerLink="name">Pokemon Name </a>
+    <a routerLink="sprite">Pokemon Sprites </a>
+</nav>
+<router-outlet />
+
+<!-- 
+    beforehand we were directly rendering these components in the home
+    component, but now we are controlling access to them through the
+    routing feature
+
+    <app-poke-name></app-poke-name>
+    <app-poke-sprite></app-poke-sprite>
+-->

@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { PokeSearch } from "../poke-search/poke-search";
 import { PokeName } from "../poke-name/poke-name";
 import { PokeSprite } from "../poke-sprite/poke-sprite";
+import { RouterOutlet, RouterLinkWithHref } from '@angular/router';
 
 @Component({
   selector: 'app-poke-home',
-  imports: [PokeSearch, PokeName, PokeSprite],
+  imports: [PokeSearch, PokeName, PokeSprite, RouterOutlet, RouterLinkWithHref],
   templateUrl: './poke-home.html',
   styleUrl: './poke-home.css',
 })

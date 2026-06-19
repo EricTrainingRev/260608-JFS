@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { PokeHome } from './components/poke-home/poke-home';
+import { PokeName } from './components/poke-name/poke-name';
+import { PokeSprite } from './components/poke-sprite/poke-sprite';
 
 /*
     This is where we control what routes are available in our application. This
@@ -15,7 +17,19 @@ export const routes: Routes = [
             the route is utilized
         */
         path: 'home',
-        component: PokeHome
+        component: PokeHome,
+        // if you ever want to conditionally render components within another component you can control that
+        // rendering via sub-routes
+        children: [
+            {
+                path:'name',
+                component: PokeName
+            },
+            {
+                path:'sprite',
+                component:PokeSprite
+            }
+        ]
     },
     {
         /*

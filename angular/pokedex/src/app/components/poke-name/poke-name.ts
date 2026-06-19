@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { PokeService } from '../../services/poke-service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-poke-name',
-  imports: [],
+  imports: [AsyncPipe],
   templateUrl: './poke-name.html',
   styleUrl: './poke-name.css',
 })
-export class PokeName {}
+export class PokeName {
+
+  pokeService = inject(PokeService);
+
+}

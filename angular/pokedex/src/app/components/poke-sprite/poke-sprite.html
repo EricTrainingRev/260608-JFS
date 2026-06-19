@@ -1,1 +1,5 @@
-<p>poke-sprite works!</p>
+@if (pokemonData()?.name != null && pokemonData()?.name != '') {
+    @for (url of getSpriteUrls(); track $index) {
+        <img [src]="url" alt="pokeImage">
+    }
+}

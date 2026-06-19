@@ -71,7 +71,11 @@ export class PokeService {
           // we log what went wrong to the console
           console.log(`Something went wrong: ${error}`)
           // we update the internal storage to an empty pokemon object
-          return of(this.emptyPokemon);
+          this.pokemonSubject.next(this.emptyPokemon);
+          // catchError needs to return an Observable so we can call the subscribe function and actually 
+          // trigger all the actions we have programmed here. Since we don't do anything with this
+          // error observable we can make its data null
+          return of(null);
         })
       ).subscribe() // to actually trigger the actions associated with an observable you must "subscribe" to it
   }

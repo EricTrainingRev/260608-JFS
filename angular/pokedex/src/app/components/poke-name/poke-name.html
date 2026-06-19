@@ -1,1 +1,22 @@
-<p>poke-name works!</p>
+<!-- 
+    When you want to access data from an Observable in your component
+    a quick way to facilitate this process is to use the async pipe. In
+    Component templates you can use pipe operators to specify some type of
+    transformation on the data you are piping.
+-->
+@if (this.pokeService.pokemon$ | async; as pokemon) {
+    @if (pokemon.name != '') {
+        <h2>A wild {{pokemon.name}} has appeared!</h2>
+    }
+}
+
+<!-- 
+    You COULD unpack the observable and reference its contained data 
+    as seen below, but this has its own set of potential problems (for 
+    instance, in the example below, if the observable data is null or undefined
+    the check against not being '' would result in true, and therefore the
+    content of the if statement would render, which is not what we actually want)
+-->
+<!-- @if ( (this.pokeService.pokemon$ | async)?.name != '' ) {
+
+} -->

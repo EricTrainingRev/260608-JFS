@@ -15,6 +15,11 @@ export class PokeSprite {
 
   pokemonData = toSignal(this.pokeService.pokemon$);
 
+  myobj = {
+    first:"one",
+    sceond:"two"
+  }
+
   getSpriteUrls(){
     /*
       Something to watch out for: if you use toSignal to save your observable data in a signal you MUST perform
@@ -30,8 +35,12 @@ export class PokeSprite {
       // even though we narrowed the type of the pokemon data earlier, we must do so again for the
       // keys of the object
       const narrowedSpriteType = spriteType as "back_default" | "front_default"
-      // now whenever we add or remove sprite properties they are dynamically removed/included in our collection of image urls
-      spriteURL.push(narrowedPokemonData.sprites[narrowedSpriteType])
+      // even though we limit ourselves to the two properties the rest still exist in the data and we want to ignore them
+      if (narrowedSpriteType == "back_default" || narrowedSpriteType == 'front_default'){
+        // now whenever we add or remove sprite properties they are dynamically removed/included in our collection of image urls
+        spriteURL.push(narrowedPokemonData.sprites[narrowedSpriteType])        
+      }
+
     }
     return spriteURL;
   }

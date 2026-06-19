@@ -1,5 +1,5 @@
-@if (pokemonData()?.name != null && pokemonData()?.name != '') {
+@if (pokemonData() != undefined && pokemonData()?.name != '') {
     @for (url of getSpriteUrls(); track $index) {
-        <img [src]="url" alt="pokeImage">
+        <img [src]="url" [alt]="`pokeImage${$index}`">
     }
 }

@@ -9,8 +9,14 @@ import java.net.http.HttpResponse;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
+import org.json.JSONObject;
+import org.json.JSONException;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
@@ -18,11 +24,12 @@ import com.theblind.todo.TodoApplication;
 
 import static org.springframework.boot.SpringApplication.run;
 
+@DisplayName("User login unit tests")
 public class UserLoginTests {
 	ApplicationContext app;
     HttpClient webClient;
-    private final String REGISTRATION_API = "http://localhost:8080/api/auth/register";
-    
+    private final String REGISTRATION_API = "http://localhost:8080/api/register";
+
     private final String LOGIN_API = "http://localhost:8080/api/auth/login";
 
     private final String JSON_JOHN_DOE_CORRECT = "{\"username\":\"john_doe\",\"password\":\"AbcDe**123\"}";
@@ -197,5 +204,29 @@ public class UserLoginTests {
         HttpResponse<String> response = webClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
         Assertions.assertEquals(400, status, "Expected Status Code 400 - Actual Code was: " + status);
+    }
+
+    /**
+     * TEST 8
+     * Checking if body contains token information to confirm successful authentication
+     * after a successful login attempt.
+     * 
+     * Expected Response:
+     *  Status Code: 200
+     *  Body: Contains non-blank 'token' and 'expiresIn' fields
+     */
+    @Test
+    public void authenticationSuccessful() throws IOException, InterruptedException, JSONException {
+    	HttpRequest postRequest = HttpRequest.newBuilder()
+                .uri(URI.create(LOGIN_API))
+                .POST(HttpRequest.BodyPublishers.ofString(JSON_JOHN_DOE_CORRECT))
+                .header("Content-Type", "application/json")
+                .build();
+        HttpResponse<String> response = webClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+        int status = response.statusCode();
+        JSONObject responseJSON = new JSONObject(response.body());
+        Assertions.assertEquals(200, status, "Expected Status Code 200 - Actual Code was: " + status);
+        assertFalse(responseJSON.optString("token").isEmpty(), "Expected JSON Web Token to be returned in response body");
+        assertFalse(responseJSON.optString("expiresIn").isEmpty(), "Expected JSON Web Token expiration time to be returned in response body");
     }
 }

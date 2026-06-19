@@ -44,6 +44,11 @@ public class AccountService {
     * @throws RegistrationFailure exception if username or password do not fit requirements
     */
     public User createAccount(String username, String password) throws RegistrationFailureException {
+        // if either credential is null, registration exception occurs
+        if (username == null || password == null) {
+           throw new RegistrationFailureException("Either username or password is null");
+        }
+
         User newAccount = null;
 
         if (usernameValidator(username) && passwordValidator(password)) {    
@@ -99,16 +104,15 @@ public class AccountService {
     public boolean usernameValidator(String username) throws RegistrationFailureException {
         // flags for requirements
         boolean lengthFlag = isCorrectLength(username), noWhiteSpaceFlag = !hasWhiteSpace(username), 
-            notNullFlag = !isNull(username), uniqueFlag = isUnique(username);
+            uniqueFlag = isUnique(username);
 
         // if all flags are set, valid username
-        if (notNullFlag && uniqueFlag && noWhiteSpaceFlag && lengthFlag) return true;
+        if (uniqueFlag && noWhiteSpaceFlag && lengthFlag) return true;
 
         // if not, return error (give specific feedback for violated requirements)
         List<Map.Entry<Boolean, String>> invalidRequirementsList = List.of(
             Map.entry(lengthFlag, "must be between 5 and 15 characters long (inclusive)"),
             Map.entry(noWhiteSpaceFlag, "must not contain whitespace"),
-            Map.entry(notNullFlag, "must not be null"),
             Map.entry(uniqueFlag, "must be unique (username already exists)")
         );
 
@@ -134,17 +138,16 @@ public class AccountService {
     public boolean passwordValidator(String password) throws RegistrationFailureException {
         // flags for requirements
         boolean charsFlag = hasRequiredCharacters(password), lengthFlag = isCorrectLength(password), 
-            noWhiteSpaceFlag = !hasWhiteSpace(password), notNullFlag = !isNull(password);
+            noWhiteSpaceFlag = !hasWhiteSpace(password);
 
         // if all flags set, valid password
-        if (notNullFlag && noWhiteSpaceFlag && charsFlag && lengthFlag) return true;
+        if (noWhiteSpaceFlag && charsFlag && lengthFlag) return true;
 
         // if not, return error (give specific feedback for violated requirements)
         List<Map.Entry<Boolean, String>> invalidRequirementsList = List.of(
             Map.entry(charsFlag, "Must contain at least one uppercase, one lowercase, one numeric, and two special characters"),
             Map.entry(lengthFlag, "Must be between 5 and 15 characters long (inclusive)"),
-            Map.entry(noWhiteSpaceFlag, "Must not contain whitespace"),
-            Map.entry(notNullFlag, "Must not be null")
+            Map.entry(noWhiteSpaceFlag, "Must not contain whitespace")
         );
 
         String message = "The password is invalid. Here are the following requirements:";
@@ -161,11 +164,6 @@ public class AccountService {
     // check if length is between 5 and 15 (inclusive)
     public boolean isCorrectLength(String credential){
         return 5 <= credential.length() && credential.length() <= 15;
-    }
-
-    // check if null
-    public boolean isNull(String credential){
-        return credential == null;
     }
 
     // check if no whitespace

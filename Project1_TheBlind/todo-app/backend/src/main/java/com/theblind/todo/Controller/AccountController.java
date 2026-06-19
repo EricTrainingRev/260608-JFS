@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class AccountController {
     private final AccountService accountService;
     private final JWTService jwtService;
@@ -50,13 +50,6 @@ public class AccountController {
     */
     @PostMapping("/register")
     public ResponseEntity<User> createAccount(@RequestBody User user) throws RegistrationFailureException {
-        // if username is null, return 400 error 
-        // (will return 401 if not checked in controller)
-        // (maybe fix with an SQL Exception Handler?)
-        if (user.getUsername() == null || user.getPassword() == null) {
-           throw new RegistrationFailureException("Either username or password is null");
-        }
-
         User newUser = accountService.createAccount(user.getUsername(), user.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
@@ -69,7 +62,7 @@ public class AccountController {
     * @return ResponseEntity object with existing user info in body of response (200 OK)
     * @throws LoginFailure exception if credentials don't match any user in database
     */
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<LoginResponse> loginAccount(@RequestBody User user) throws LoginFailureException {
         User existingUser = accountService.loginAccount(user.getUsername(), user.getPassword());
         String jwtToken = jwtService.generateToken(existingUser);

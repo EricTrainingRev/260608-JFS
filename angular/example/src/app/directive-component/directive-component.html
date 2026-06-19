@@ -1,1 +1,12 @@
 <p appCustomDirective>This element is in the directive component and receiving styling from a custom directive</p>
+
+<label for="widthSlider">Move the slider to adjust the p width below</label>
+<input id="widthSlider" type="range" min="10" max="100" [(ngModel)] = "percentage">
+<!-- 
+    ngClass let's you control class addition/remove via code in your component class. The CSS class should be
+    returned from your helper method as a simple string
+
+    ngStyle is a flexible directive that let's you set style properties for your element via component class
+    properties
+-->
+<p [ngClass]="setColorClass()" [ngStyle]="{'width':percentage+'%'}">Control the width with the slider above</p>

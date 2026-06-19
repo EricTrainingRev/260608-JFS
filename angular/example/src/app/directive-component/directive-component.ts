@@ -1,15 +1,22 @@
 import { Component } from '@angular/core';
-import { NgClass, NgStyle } from "../../../node_modules/@angular/common/types/_common_module-chunk";
 import { CustomDirective } from '../directive/custom-directive';
+import { FormsModule } from '@angular/forms';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-directive-component',
-  imports: [CustomDirective],
+  imports: [CustomDirective, FormsModule, NgClass, NgStyle],
   templateUrl: './directive-component.html',
   styleUrl: './directive-component.css',
 })
 export class DirectiveComponent {
 
-  shouldClassBeActive = true;
+  percentage = 10;
+
+  setColorClass() {
+    if(this.percentage <= 30) return 'small'
+    else if (this.percentage <=70) return 'medium'
+    else return 'large'
+  }
 
 }

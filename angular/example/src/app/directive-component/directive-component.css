@@ -1,3 +1,11 @@
-.exampleClass {
+.small {
     color:red;
+}
+
+.medium {
+    color: yellow;
+}
+
+.large {
+    color: green;
 }

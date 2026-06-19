@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { LoginService } from '../../services/login-service';
 
 @Component({
   selector: 'app-poke-login',
@@ -6,4 +7,12 @@ import { Component } from '@angular/core';
   templateUrl: './poke-login.html',
   styleUrl: './poke-login.css',
 })
-export class PokeLogin {}
+export class PokeLogin {
+
+  private loginService = inject(LoginService)
+
+  login(){
+    this.loginService.attemptLogin();
+  }
+
+}

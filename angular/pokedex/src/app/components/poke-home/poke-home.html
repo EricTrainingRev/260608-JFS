@@ -2,7 +2,17 @@
 <p>Search for a pokemon by its name or id to see its information</p>
 <app-poke-search></app-poke-search>
 <nav>
-    <a routerLink="">Pokemon Home </a>
+    <!-- 
+        "/home" is an absolute navigation path: when we click it the page navigates
+        to "localhost:4200/home" 
+    -->
+    <a routerLink="/home">Pokemon Home </a>
+    <!-- 
+        Without the "/" these paths are relative: they are appended to whatever
+        the url currently is. Because we access this component at the "/home"
+        endpoint clicking these links navigates to "/home/name" and "/home/sprite"
+        respectively
+    -->
     <a routerLink="name">Pokemon Name </a>
     <a routerLink="sprite">Pokemon Sprites </a>
 </nav>

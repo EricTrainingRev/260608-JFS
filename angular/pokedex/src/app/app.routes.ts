@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { PokeHome } from './components/poke-home/poke-home';
 import { PokeName } from './components/poke-name/poke-name';
 import { PokeSprite } from './components/poke-sprite/poke-sprite';
+import { PokeLogin } from './components/poke-login/poke-login';
+import { loginGuard } from './guards/login-guard';
 
 /*
     This is where we control what routes are available in our application. This
@@ -29,7 +31,8 @@ export const routes: Routes = [
                 path:'sprite',
                 component:PokeSprite
             }
-        ]
+        ],
+        canActivate:[loginGuard]
     },
     {
         /*
@@ -39,7 +42,11 @@ export const routes: Routes = [
             redirect to the home route
         */
         path:'',
-        redirectTo:'home',
+        redirectTo:'login',
         pathMatch:'full'
+    },
+    {
+        path:'login',
+        component:PokeLogin
     }
 ];

@@ -80,28 +80,4 @@ public class AccountController {
         
         return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
     }
-
-    /** 
-    * Exception handler for RegistrationFailure exceptions in this controller.
-    *
-    * @param exception - a RegistrationFailure exception (user inputted bad username or password)
-    * 
-    * @return a response entity with a message and a 400 status code
-    */
-    @ExceptionHandler(RegistrationFailureException.class)
-    public ResponseEntity<String> handleRegistrationFailureException(RegistrationFailureException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
-
-    /** 
-    * Exception handler for LoginFailure exceptions in this controller.
-    *
-    * @param exception - a LoginFailure exception (credentials do not match)
-    * 
-    * @return a response entity with a message and a 400 status code
-    */
-    @ExceptionHandler(LoginFailureException.class)
-    public ResponseEntity<String> handleLoginFailure(LoginFailureException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
 }

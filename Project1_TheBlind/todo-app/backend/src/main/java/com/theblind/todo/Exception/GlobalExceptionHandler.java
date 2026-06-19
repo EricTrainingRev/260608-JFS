@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException{
     /**
-     * Handles validation errors from the service layer.
+     * Handles task validation errors from the service layer.
      *
      * @param e the thrown {@link IllegalArgumentException}
      * @return ResponseEntity with HTTP status 400 (Bad Request) and a problem detail body
@@ -32,5 +32,31 @@ public class GlobalExceptionHandler extends RuntimeException{
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         pd.setTitle("Requested Resource Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
+    }
+
+    /**
+     * Handles account validation errors from the service layer.
+     *
+     * @param e the thrown RegistrationFailureException
+     * @return ResponseEntity with HTTP status 400 (Bad Request) and a problem detail body
+     */
+    @ExceptionHandler(RegistrationFailureException.class)
+    public ResponseEntity<ProblemDetail> handleRegistrationFailure(RegistrationFailureException e) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        pd.setTitle("Invalid Request");
+        return ResponseEntity.badRequest().body(pd);
+    }
+
+    /**
+     * Handles user authentication errors from the service layer.
+     *
+     * @param e the thrown LoginFailureException
+     * @return ResponseEntity with HTTP status 400 (Bad Request) and a problem detail body
+     */
+    @ExceptionHandler(LoginFailureException.class)
+    public ResponseEntity<ProblemDetail> handleLoginFailure(LoginFailureException e) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        pd.setTitle("Invalid Request");
+        return ResponseEntity.badRequest().body(pd);
     }
 }

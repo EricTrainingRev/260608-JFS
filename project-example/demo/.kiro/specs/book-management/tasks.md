@@ -99,8 +99,8 @@ This plan implements full CRUD book management for the Summer Reading Tracker. W
 - [ ] 6. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 7. Create test configuration for H2
-  - [ ] 7.1 Create test.properties for H2 in-memory database
+- [x] 7. Create test configuration for H2
+  - [x] 7.1 Create test.properties for H2 in-memory database
     - Create `src/test/resources/test.properties` (or `application-test.properties` depending on test setup)
     - Configure H2 datasource URL, driver, dialect, and ddl-auto settings for the test environment
     - Ensure tests use H2 instead of SQLite

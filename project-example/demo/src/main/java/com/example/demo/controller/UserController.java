@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.LoginFailure;
 import com.example.demo.exception.RegistrationFailure;
 import com.example.demo.service.UserService;
+import com.example.demo.utility.JwtUtility;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class UserController {
     // Reminder: because Spring is managing our dependencies, we only need to declare the particular component
     // needed for this class to work. In this case, the userService
     private final UserService userService;
+    private final JwtUtility jwtUtility;
 
     /*
         there is a fair bit going on here:
@@ -42,6 +45,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User credentials) {
+        User user = userService.login(credentials);
+        String token = jwtUtility.generateToken(user);
+        return ResponseEntity.ok(token);
+    }
+
     /*
         NOTE: this exception handler is NOT universal: it will only trigger for any RegistrationFailiure
         exceptions triggered by UserController code
@@ -49,6 +59,11 @@ public class UserController {
     @ExceptionHandler(RegistrationFailure.class)
     public ResponseEntity<String> handleRegistrationFailure(RegistrationFailure exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(LoginFailure.class)
+    public ResponseEntity<String> handleLoginFailure(LoginFailure exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

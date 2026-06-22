@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.LoginFailure;
 import com.example.demo.exception.RegistrationFailure;
 import com.example.demo.repo.UserRepo;
 
@@ -122,5 +123,28 @@ public class UserService {
         return !userOptional.isPresent();
     }
 
+    /**
+     * Authenticates a user by verifying their username and password.
+     * Returns the full User entity on success so the controller can generate a JWT.
+     */
+    public User login(User credentials) {
+        if (isNull(credentials.getUsername()) || isNull(credentials.getPassword())) {
+            throw new LoginFailure("Username and password are required");
+        }
+
+        Optional<User> userOptional = userRepo.findByUsername(credentials.getUsername());
+
+        if (userOptional.isEmpty()) {
+            throw new LoginFailure("Invalid username or password");
+        }
+
+        User user = userOptional.get();
+
+        if (!user.getPassword().equals(credentials.getPassword())) {
+            throw new LoginFailure("Invalid username or password");
+        }
+
+        return user;
+    }
 
 }

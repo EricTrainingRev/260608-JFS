@@ -1,10 +1,17 @@
+<!-- Home page layout: header + form + book table -->
 <section aria-labelledby="home-heading">
+  <!-- Page header with title and logout action -->
   <header>
     <h1 id="home-heading">My Books</h1>
     <button type="button" (click)="logout()">Logout</button>
   </header>
 
-  <!-- Book Form -->
+  <!--
+    Book Form
+    - Bound to the reactive `bookForm` FormGroup in the component.
+    - Serves double duty: creates a new book OR updates an existing one,
+      depending on whether `editingBookId` is set.
+  -->
   <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" aria-label="Book form">
     <div>
       <label for="title">Title</label>
@@ -27,20 +34,23 @@
     </div>
 
     <div>
+      <!-- Button text changes based on create vs. edit mode -->
       <button type="submit" [disabled]="bookForm.invalid">
         {{ editingBookId() ? 'Update Book' : 'Add Book' }}
       </button>
+      <!-- Cancel button only visible when editing an existing book -->
       @if (editingBookId()) {
         <button type="button" (click)="cancelEdit()">Cancel</button>
       }
     </div>
   </form>
 
+  <!-- Error message — uses role="alert" so screen readers announce it immediately -->
   @if (errorMessage()) {
     <p role="alert" class="error-message">{{ errorMessage() }}</p>
   }
 
-  <!-- Book List -->
+  <!-- Book List — shown as a table, or a placeholder message if empty -->
   @if (books().length === 0) {
     <p>No books yet. Add one above!</p>
   } @else {
@@ -55,6 +65,7 @@
         </tr>
       </thead>
       <tbody>
+        <!-- @for with track by book.id for efficient DOM diffing -->
         @for (book of books(); track book.id) {
           <tr>
             <td>{{ book.title }}</td>

@@ -1,0 +1,27 @@
+<section aria-labelledby="register-heading">
+  <h1 id="register-heading">Register</h1>
+
+  @if (successMessage()) {
+    <p role="status" class="success-message">{{ successMessage() }}</p>
+  }
+
+  @if (errorMessage()) {
+    <p role="alert" class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="username">Username</label>
+      <input id="username" type="text" autocomplete="username" formControlName="username" />
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="new-password" formControlName="password" />
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <p>Already have an account? <a routerLink="/login">Login here</a></p>
+</section>

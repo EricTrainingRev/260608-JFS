@@ -1,0 +1,73 @@
+<section aria-labelledby="home-heading">
+  <header>
+    <h1 id="home-heading">My Books</h1>
+    <button type="button" (click)="logout()">Logout</button>
+  </header>
+
+  <!-- Book Form -->
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" aria-label="Book form">
+    <div>
+      <label for="title">Title</label>
+      <input id="title" type="text" formControlName="title" />
+    </div>
+
+    <div>
+      <label for="author">Author</label>
+      <input id="author" type="text" formControlName="author" />
+    </div>
+
+    <div>
+      <label for="genre">Genre</label>
+      <input id="genre" type="text" formControlName="genre" />
+    </div>
+
+    <div>
+      <label for="pageCount">Page Count</label>
+      <input id="pageCount" type="number" formControlName="pageCount" />
+    </div>
+
+    <div>
+      <button type="submit" [disabled]="bookForm.invalid">
+        {{ editingBookId() ? 'Update Book' : 'Add Book' }}
+      </button>
+      @if (editingBookId()) {
+        <button type="button" (click)="cancelEdit()">Cancel</button>
+      }
+    </div>
+  </form>
+
+  @if (errorMessage()) {
+    <p role="alert" class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <!-- Book List -->
+  @if (books().length === 0) {
+    <p>No books yet. Add one above!</p>
+  } @else {
+    <table aria-label="Book list">
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Author</th>
+          <th scope="col">Genre</th>
+          <th scope="col">Pages</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (book of books(); track book.id) {
+          <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.genre }}</td>
+            <td>{{ book.pageCount }}</td>
+            <td>
+              <button type="button" (click)="editBook(book)">Edit</button>
+              <button type="button" (click)="deleteBook(book.id!)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

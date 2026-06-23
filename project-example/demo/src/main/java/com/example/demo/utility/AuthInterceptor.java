@@ -27,6 +27,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        // A common strategy for passing auth tokens is through the Authorization header
         String authHeader = request.getHeader("Authorization");
 
         // Expect header in the form: "Bearer <token>"

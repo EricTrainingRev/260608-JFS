@@ -35,7 +35,7 @@ public class JwtUtility {
                 .verifyWith(key) // we tell the parser what key to use to decrypt the jwt
                 .build()
                 .parseSignedClaims(token); // the parser attempts to read the jwt: if they jwt is valid no exceptions 
-                                           // are thrown the jwt is valid and we return true 
+                                           // are thrown, the jwt is valid, and we return true 
             return true;
         } catch (JwtException | IllegalArgumentException e){
             /*

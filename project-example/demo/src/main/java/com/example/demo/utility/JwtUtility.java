@@ -7,12 +7,14 @@ import javax.crypto.SecretKey;
 
 import com.example.demo.entity.User;
 
+import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 public class JwtUtility {
     private final String SECRET = "this-works-for-dev-use-environemnt-in-prod";
     private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));

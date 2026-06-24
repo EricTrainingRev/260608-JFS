@@ -9,7 +9,7 @@ Run the project's Prettier formatter to apply consistent formatting to all sourc
 
 ## Steps
 
-1. Execute the bash script at `.kiro\skills\format\scripts\format.sh` which runs `npm run format`.
+1. Execute the bash script at `.kiro/skills/format/scripts/format.sh` which runs `npm run format`.
     - AWLAYS RUN VIA THE SCRIPT
     - any future side-effects will be handled via this script
 2. Report the result — how many files were changed, or confirm everything was already formatted.

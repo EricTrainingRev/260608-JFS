@@ -1,7 +1,7 @@
 <section aria-labelledby="register-heading">
   <h1 id="register-heading">Register</h1>
 
-    <!-- 
+  <!-- 
        [formGroup]="registerForm" is a property binding that connects this <form> element
        to the FormGroup instance in the component class. This enables Angular's reactive
        forms features (value tracking, validation, etc.) on this form.
@@ -12,7 +12,7 @@
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div>
       <label for="username">Username</label>
-        <!-- 
+      <!-- 
            formControlName="username" links this input to the 'username' FormControl
            inside the parent FormGroup. Angular syncs the input's value with the control
            automatically (two-way binding managed internally by ReactiveFormsModule). 
@@ -32,13 +32,13 @@
     <button type="submit">Register</button>
   </form>
 
-    @if (successMessage()) {
-        <p role="status" class="success-message">{{ successMessage() }}</p>
-    }
+  @if (successMessage()) {
+    <p role="status" class="success-message">{{ successMessage() }}</p>
+  }
 
-    @if (errorMessage()) {
-        <p role="alert" class="error-message">{{ errorMessage() }}</p>
-    }
+  @if (errorMessage()) {
+    <p role="alert" class="error-message">{{ errorMessage() }}</p>
+  }
 
   <p>Already have an account? <a routerLink="/login">Login here</a></p>
 </section>

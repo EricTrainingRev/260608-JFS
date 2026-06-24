@@ -49,25 +49,30 @@ export class Register {
     //              rather than just the parsed body
     //     responseType: 'text' tells Angular to treat the response body as plain text
     //                   instead of attempting to parse it as JSON
-    this.http.post('http://localhost:8080/register', body, { observe: 'response', responseType: 'text' }).subscribe({
-      // .subscribe() triggers the HTTP request and lets us handle the result.
-      // http.post() returns an Observable — it won't execute until subscribed to.
-      // The object passed to subscribe() is an Observer with callback functions:
-      //   next: called when the request completes successfully (2xx status)
-      //   error: called when the request fails (network error or non-2xx status)
-      // Angular's HttpClient automatically routes non-2xx responses to the error callback.
+    this.http
+      .post('http://localhost:8080/register', body, { observe: 'response', responseType: 'text' })
+      .subscribe({
+        // .subscribe() triggers the HTTP request and lets us handle the result.
+        // http.post() returns an Observable — it won't execute until subscribed to.
+        // The object passed to subscribe() is an Observer with callback functions:
+        //   next: called when the request completes successfully (2xx status)
+        //   error: called when the request fails (network error or non-2xx status)
+        // Angular's HttpClient automatically routes non-2xx responses to the error callback.
 
-      next: (response) => {
-        // A 201 status indicates the account was created successfully
-        if (response.status === 201) {
-          this.successMessage.set('Registration successful!');
-        }
-      },
-      error: (err) => {
-        // Display the error message returned by the backend, or a generic fallback
-        const message = typeof err.error === 'string' ? err.error : (err.error?.message ?? 'An unexpected error occurred');
-        this.errorMessage.set(message);
-      },
-    });
+        next: (response) => {
+          // A 201 status indicates the account was created successfully
+          if (response.status === 201) {
+            this.successMessage.set('Registration successful!');
+          }
+        },
+        error: (err) => {
+          // Display the error message returned by the backend, or a generic fallback
+          const message =
+            typeof err.error === 'string'
+              ? err.error
+              : (err.error?.message ?? 'An unexpected error occurred');
+          this.errorMessage.set(message);
+        },
+      });
   }
 }

@@ -48,7 +48,10 @@ export class Home implements OnInit {
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     author: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     genre: new FormControl('', { nonNullable: true }),
-    pageCount: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1)] }),
+    pageCount: new FormControl(0, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.min(1)],
+    }),
   });
 
   // --- Lifecycle ---

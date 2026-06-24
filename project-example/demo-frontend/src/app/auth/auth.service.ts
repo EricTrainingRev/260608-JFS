@@ -29,7 +29,11 @@ export class AuthService {
    * and calling `setToken()` with the result.
    */
   login(username: string, password: string) {
-    return this.http.post('http://localhost:8080/login', { username, password }, { responseType: 'text' });
+    return this.http.post(
+      'http://localhost:8080/login',
+      { username, password },
+      { responseType: 'text' },
+    );
   }
 
   /** Store the token in memory and localStorage */

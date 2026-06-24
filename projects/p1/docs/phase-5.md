@@ -25,7 +25,7 @@ Be prepared to answer questions regarding:
 *   **Challenges:** How the team utilized Git, resolved merge conflicts, or overcame technical blockers identified during Stand-ups.
 
 ### 3. Build & Deployment
-*   **Clean Build:** You must be able to run `./gradlew build` (or equivalent) and `ng build` to prove the project is not running on "magic" local configurations.
+*   **Clean Build/Run:** You must be able to run `./gradlew bootRun` (or equivalent) and `npm run start`.
 *   **Startup:** The application must start successfully with a single command or set of commands.
 
 ## Success Criteria

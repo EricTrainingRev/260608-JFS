@@ -1,6 +1,6 @@
 ---
 name: format
-description: Runs Prettier to format all source files in the project. Use when you want to ensure consistent code formatting across the codebase.
+description: Runs Prettier via the format.sh script to format all source files in the project. Use when you want to ensure consistent code formatting across the codebase.
 ---
 
 # Format Code

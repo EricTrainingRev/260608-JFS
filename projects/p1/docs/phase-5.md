@@ -28,6 +28,10 @@ Be prepared to answer questions regarding:
 *   **Clean Build/Run:** You must be able to run `./gradlew bootRun` (or equivalent) and `npm run start`.
 *   **Startup:** The application must start successfully with a single command or set of commands.
 
+### 4. General Requirements
+*   **Timing:** Your presentation should be ~15 minutes in length
+*   **Participation:** All team members must participate in the presentation
+
 ## Success Criteria
 A successful presentation is evaluated on:
 *   **Alignment:** Does the software actually do what the User Stories required?

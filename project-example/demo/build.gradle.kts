@@ -34,6 +34,8 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 	testImplementation("com.h2database:h2:2.4.240")
+	testImplementation("io.rest-assured:rest-assured:6.0.0")
+	testImplementation("io.rest-assured:spring-mock-mvc:6.0.0")
 }
 
 tasks.withType<Test> {

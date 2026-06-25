@@ -14,13 +14,26 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 
 /**
- * Integration tests for BookController endpoints.
- * Extends BaseIntegrationTest for REST Assured configuration and auth helpers.
+ * Integration tests for BookController endpoints (CRUD operations on books).
+ *
+ * Each test registers a UNIQUE user so book collections don't interfere across tests.
+ * The tests verify:
+ *   - Creating books with valid/invalid data
+ *   - Reading books (all, by ID, across users)
+ *   - Updating books with valid/invalid data
+ *   - Deleting books
+ *   - Proper 401 responses when auth is missing
+ *
+ * Extends BaseIntegrationTest for REST Assured config and the obtainAuthToken() helper.
  */
 class BookControllerIT extends BaseIntegrationTest {
 
     // ==================== Book Creation Tests (Requirements 6.1–6.5) ====================
 
+    /**
+     * Happy path: creating a book with all valid fields returns 201
+     * and the response body contains the saved book with a generated ID.
+     */
     @Test
     void createBook_withValidData_returns201WithBook() {
         String token = obtainAuthToken("bookUser1", "Pass1abc");
@@ -37,14 +50,18 @@ class BookControllerIT extends BaseIntegrationTest {
         .when()
             .post("/books")
         .then()
-            .statusCode(201)
-            .body("id", notNullValue())
-            .body("title", equalTo("The Great Gatsby"))
+            .statusCode(201)                                    // 201 Created
+            .body("id", notNullValue())                         // Server generated a UUID
+            .body("title", equalTo("The Great Gatsby"))         // Echoes back what we sent
             .body("author", equalTo("F. Scott Fitzgerald"))
             .body("genre", equalTo("Fiction"))
             .body("pageCount", equalTo(180));
     }
 
+    /**
+     * Attempting to create a book WITHOUT an Authorization header should be blocked
+     * by the AuthInterceptor before the controller is even reached.
+     */
     @Test
     void createBook_withoutAuth_returns401() {
         given()
@@ -58,9 +75,12 @@ class BookControllerIT extends BaseIntegrationTest {
         .when()
             .post("/books")
         .then()
-            .statusCode(401);
+            .statusCode(401); // Interceptor rejects unauthenticated requests
     }
 
+    /**
+     * A garbage token (not a valid JWT at all) should also be rejected with 401.
+     */
     @Test
     void createBook_withInvalidToken_returns401() {
         given()
@@ -75,9 +95,13 @@ class BookControllerIT extends BaseIntegrationTest {
         .when()
             .post("/books")
         .then()
-            .statusCode(401);
+            .statusCode(401); // Token can't be parsed/verified
     }
 
+    /**
+     * Validation: a book with a blank title should be rejected with 400.
+     * The service layer enforces that title is non-empty.
+     */
     @Test
     void createBook_withBlankTitle_returns400() {
         String token = obtainAuthToken("bookUser2", "Pass1abc");
@@ -86,7 +110,7 @@ class BookControllerIT extends BaseIntegrationTest {
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
             .body(Map.of(
-                "title", "",
+                "title", "",           // Blank title — should fail validation
                 "author", "Some Author",
                 "genre", "Fiction",
                 "pageCount", 200
@@ -94,14 +118,18 @@ class BookControllerIT extends BaseIntegrationTest {
         .when()
             .post("/books")
         .then()
-            .statusCode(400);
+            .statusCode(400); // Bad Request due to validation failure
     }
 
+    /**
+     * Validation: pageCount must be between 1 and 25000.
+     * Tests both below-minimum (0) and above-maximum (25001) values.
+     */
     @Test
     void createBook_withInvalidPageCount_returns400() {
         String token = obtainAuthToken("bookUser3", "Pass1abc");
 
-        // pageCount < 1
+        // pageCount = 0 (below minimum of 1)
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -116,7 +144,7 @@ class BookControllerIT extends BaseIntegrationTest {
         .then()
             .statusCode(400);
 
-        // pageCount > 25000
+        // pageCount = 25001 (above maximum of 25000)
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -134,6 +162,10 @@ class BookControllerIT extends BaseIntegrationTest {
 
     // ==================== Book Read Tests (Requirements 7.1–7.7) ====================
 
+    /**
+     * After creating two books for a user, GET /books should return exactly
+     * those two books in a JSON array, each with all expected fields populated.
+     */
     @Test
     void getBooks_withBooks_returns200WithArray() {
         String token = obtainAuthToken("readUser1", "Pass1abc");
@@ -167,39 +199,46 @@ class BookControllerIT extends BaseIntegrationTest {
         .then()
             .statusCode(201);
 
-        // GET /books should return array of size 2 with only this user's books
+        // GET /books should return an array of exactly 2 books belonging to this user
         given()
             .header("Authorization", "Bearer " + token)
         .when()
             .get("/books")
         .then()
             .statusCode(200)
-            .body("$", hasSize(2))
-            .body("[0].id", notNullValue())
-            .body("[0].title", notNullValue())
-            .body("[0].author", notNullValue())
-            .body("[0].pageCount", notNullValue());
+            .body("$", hasSize(2))              // Root JSON array has 2 elements
+            .body("[0].id", notNullValue())     // First book has an ID
+            .body("[0].title", notNullValue())  // First book has a title
+            .body("[0].author", notNullValue()) // First book has an author
+            .body("[0].pageCount", notNullValue()); // First book has a page count
     }
 
+    /**
+     * A freshly registered user with no books should get back an empty JSON array.
+     */
     @Test
     void getBooks_withNoBooks_returns200WithEmptyArray() {
         String token = obtainAuthToken("readUser2", "Pass1abc");
 
-        // Fresh user with no books — GET /books should return empty array
+        // Fresh user, no books created — should return []
         given()
             .header("Authorization", "Bearer " + token)
         .when()
             .get("/books")
         .then()
             .statusCode(200)
-            .body("$", empty());
+            .body("$", empty()); // Empty JSON array
     }
 
+    /**
+     * GET /books/{id} with a valid book ID should return that specific book
+     * with all its fields matching what was originally created.
+     */
     @Test
     void getBookById_withValidId_returns200WithBook() {
         String token = obtainAuthToken("readUser3", "Pass1abc");
 
-        // Create a book and extract the ID
+        // Create a book and capture its server-generated ID
         String bookId = given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -214,9 +253,9 @@ class BookControllerIT extends BaseIntegrationTest {
         .then()
             .statusCode(201)
             .extract()
-            .path("id");
+            .path("id"); // Extract the generated UUID from the response
 
-        // GET /books/{id} should return the book with matching fields
+        // GET /books/{id} — verify all fields match what we created
         given()
             .header("Authorization", "Bearer " + token)
         .when()
@@ -230,11 +269,15 @@ class BookControllerIT extends BaseIntegrationTest {
             .body("pageCount", equalTo(320));
     }
 
+    /**
+     * GET /books/{id} with a UUID that doesn't correspond to any book
+     * should return 404 Not Found.
+     */
     @Test
     void getBookById_withNonExistentId_returns404() {
         String token = obtainAuthToken("readUser4", "Pass1abc");
 
-        // GET /books/{random-uuid} should return 404
+        // Random UUID that was never used to create a book
         given()
             .header("Authorization", "Bearer " + token)
         .when()
@@ -243,12 +286,17 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(404);
     }
 
+    /**
+     * Users should only be able to see their OWN books.
+     * If User A creates a book, User B requesting that book by ID should get 404
+     * (not 403) to avoid leaking the existence of other users' books.
+     */
     @Test
     void getBookById_ownedByDifferentUser_returns404() {
         String tokenA = obtainAuthToken("readUser5", "Pass1abc");
         String tokenB = obtainAuthToken("readUser6", "Pass1abc");
 
-        // Create a book as user A
+        // User A creates a book
         String bookId = given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + tokenA)
@@ -265,7 +313,7 @@ class BookControllerIT extends BaseIntegrationTest {
             .extract()
             .path("id");
 
-        // GET as user B should return 404
+        // User B tries to access User A's book — should get 404 (not 403)
         given()
             .header("Authorization", "Bearer " + tokenB)
         .when()
@@ -274,11 +322,15 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(404);
     }
 
+    /**
+     * GET /books/{id} where {id} is not a valid UUID format should return 400.
+     * The controller validates the path variable format before querying the DB.
+     */
     @Test
     void getBookById_withInvalidUuid_returns400() {
         String token = obtainAuthToken("readUser7", "Pass1abc");
 
-        // GET /books/not-a-uuid should return 400
+        // "not-a-uuid" is not valid UUID format — should fail fast with 400
         given()
             .header("Authorization", "Bearer " + token)
         .when()
@@ -288,9 +340,11 @@ class BookControllerIT extends BaseIntegrationTest {
             .body(equalTo("Book identifier is invalid"));
     }
 
+    /**
+     * GET /books without any auth header should be blocked by the interceptor.
+     */
     @Test
     void getBooks_withoutAuth_returns401() {
-        // GET /books without Authorization header should return 401
         given()
             .contentType(ContentType.JSON)
         .when()
@@ -301,11 +355,15 @@ class BookControllerIT extends BaseIntegrationTest {
 
     // ==================== Book Update Tests (Requirements 8.1–8.5) ====================
 
+    /**
+     * Happy path: PUT /books/{id} with valid updated data should return 200
+     * and the response body should reflect ALL the new values.
+     */
     @Test
     void updateBook_withValidData_returns200WithUpdatedBook() {
         String token = obtainAuthToken("updateUser1", "Pass1abc");
 
-        // Create a book first
+        // Create the book we'll later update
         String bookId = given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -322,7 +380,7 @@ class BookControllerIT extends BaseIntegrationTest {
             .extract()
             .path("id");
 
-        // PUT /books/{id} with updated values
+        // PUT /books/{id} with completely new values
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -335,19 +393,23 @@ class BookControllerIT extends BaseIntegrationTest {
         .when()
             .put("/books/" + bookId)
         .then()
-            .statusCode(200)
-            .body("id", equalTo(bookId))
-            .body("title", equalTo("Updated Title"))
+            .statusCode(200)                              // 200 OK = update succeeded
+            .body("id", equalTo(bookId))                  // ID stays the same
+            .body("title", equalTo("Updated Title"))      // Fields reflect new values
             .body("author", equalTo("Updated Author"))
             .body("genre", equalTo("Non-Fiction"))
             .body("pageCount", equalTo(350));
     }
 
+    /**
+     * PUT /books/{id} where {id} doesn't exist should return 404.
+     * You can't update a book that was never created.
+     */
     @Test
     void updateBook_withNonExistentId_returns404() {
         String token = obtainAuthToken("updateUser2", "Pass1abc");
 
-        // PUT /books/{random-uuid} should return 404
+        // Random UUID — no book exists with this ID
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -363,9 +425,11 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(404);
     }
 
+    /**
+     * PUT without auth should be blocked by the interceptor.
+     */
     @Test
     void updateBook_withoutAuth_returns401() {
-        // PUT without Authorization header should return 401
         given()
             .contentType(ContentType.JSON)
             .body(Map.of(
@@ -380,11 +444,15 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(401);
     }
 
+    /**
+     * Validation on update: blank title and out-of-range pageCount should both
+     * return 400. Tests two invalid scenarios against the same book.
+     */
     @Test
     void updateBook_withInvalidData_returns400() {
         String token = obtainAuthToken("updateUser3", "Pass1abc");
 
-        // Create a book first
+        // Create a valid book first
         String bookId = given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -401,7 +469,7 @@ class BookControllerIT extends BaseIntegrationTest {
             .extract()
             .path("id");
 
-        // PUT with blank title should return 400
+        // Attempt update with blank title — should fail validation
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -416,7 +484,7 @@ class BookControllerIT extends BaseIntegrationTest {
         .then()
             .statusCode(400);
 
-        // PUT with invalid pageCount (> 99999) should return 400
+        // Attempt update with pageCount > 99999 — should fail validation
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -432,11 +500,14 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(400);
     }
 
+    /**
+     * PUT /books/{id} where {id} is not a valid UUID string should return 400
+     * with a descriptive error message, without hitting the database.
+     */
     @Test
     void updateBook_withInvalidUuid_returns400() {
         String token = obtainAuthToken("updateUser4", "Pass1abc");
 
-        // PUT /books/not-a-uuid should return 400
         given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -455,11 +526,15 @@ class BookControllerIT extends BaseIntegrationTest {
 
     // ==================== Book Delete Tests (Requirements 9.1–9.5) ====================
 
+    /**
+     * Happy path: DELETE /books/{id} for an existing book returns 204 No Content.
+     * 204 means "success, but there's nothing to send back in the body."
+     */
     @Test
     void deleteBook_withValidId_returns204() {
         String token = obtainAuthToken("deleteUser1", "Pass1abc");
 
-        // Create a book first
+        // Create a book to delete
         String bookId = given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
@@ -476,15 +551,19 @@ class BookControllerIT extends BaseIntegrationTest {
             .extract()
             .path("id");
 
-        // DELETE /books/{id} should return 204 No Content
+        // DELETE /books/{id} — should succeed with 204
         given()
             .header("Authorization", "Bearer " + token)
         .when()
             .delete("/books/" + bookId)
         .then()
-            .statusCode(204);
+            .statusCode(204); // No Content — book is gone
     }
 
+    /**
+     * After deleting a book, attempting to GET it by ID should return 404.
+     * This confirms the delete actually removed the record from the database.
+     */
     @Test
     void deleteBook_thenGet_returns404() {
         String token = obtainAuthToken("deleteUser2", "Pass1abc");
@@ -506,7 +585,7 @@ class BookControllerIT extends BaseIntegrationTest {
             .extract()
             .path("id");
 
-        // DELETE the book
+        // Delete the book
         given()
             .header("Authorization", "Bearer " + token)
         .when()
@@ -514,7 +593,7 @@ class BookControllerIT extends BaseIntegrationTest {
         .then()
             .statusCode(204);
 
-        // GET the same book should return 404
+        // Now try to GET the same book — should be 404 since it's deleted
         given()
             .header("Authorization", "Bearer " + token)
         .when()
@@ -523,11 +602,14 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(404);
     }
 
+    /**
+     * DELETE /books/{id} where {id} doesn't exist should return 404.
+     * Can't delete something that isn't there.
+     */
     @Test
     void deleteBook_withNonExistentId_returns404() {
         String token = obtainAuthToken("deleteUser3", "Pass1abc");
 
-        // DELETE /books/{random-uuid} should return 404
         given()
             .header("Authorization", "Bearer " + token)
         .when()
@@ -536,9 +618,11 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(404);
     }
 
+    /**
+     * DELETE without auth should be blocked by the interceptor.
+     */
     @Test
     void deleteBook_withoutAuth_returns401() {
-        // DELETE without Authorization header should return 401
         given()
         .when()
             .delete("/books/" + UUID.randomUUID())
@@ -546,11 +630,14 @@ class BookControllerIT extends BaseIntegrationTest {
             .statusCode(401);
     }
 
+    /**
+     * DELETE /books/{id} where {id} is not a valid UUID format should return 400
+     * with a descriptive message.
+     */
     @Test
     void deleteBook_withInvalidUuid_returns400() {
         String token = obtainAuthToken("deleteUser5", "Pass1abc");
 
-        // DELETE /books/not-a-uuid should return 400
         given()
             .header("Authorization", "Bearer " + token)
         .when()

@@ -44,6 +44,8 @@ public abstract class BaseIntegrationTest {
     void setUp() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = port;
+        // adds automatic logging of request and response for failed REST Assured tests
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
     /**

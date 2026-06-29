@@ -35,11 +35,13 @@ class UserControllerIT extends BaseIntegrationTest {
     @Test
     void register_withValidCredentials_returns201() {
         given()
+            .log().all() // tells REST Assured to log all the request data
             .contentType(ContentType.JSON)
             .body(Map.of("username", "regUser1", "password", "Pass1abc"))
         .when()
             .post("/register")
         .then()
+            .log().all() // tells REST Assured to log all of the response data
             .statusCode(201)               // 201 Created = account registered
             .body(emptyOrNullString());    // No body content on successful registration
     }

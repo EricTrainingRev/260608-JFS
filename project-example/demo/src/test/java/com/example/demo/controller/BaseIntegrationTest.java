@@ -9,7 +9,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 
 import static io.restassured.RestAssured.given;
 
@@ -49,6 +53,53 @@ public abstract class BaseIntegrationTest {
     @AfterAll
     static void tearDown() {
         RestAssured.reset();
+    }
+
+    /**
+     * ======================= NOTE-KEEPING EXAMPLE =======================
+     *
+     * This method demonstrates how REST Assured "specs" (RequestSpecification
+     * and ResponseSpecification) can centralize repetitive setup so individual
+     * tests stay clean and DRY.
+     *
+     * A RequestSpecification pre-configures things every request needs:
+     *   - base URI and port
+     *   - default content type
+     *   - common headers (e.g., Authorization)
+     *
+     * A ResponseSpecification pre-configures expected response defaults:
+     *   - expected status code
+     *   - expected content type
+     *
+     * Instead of repeating ".contentType(JSON).header("Authorization", ...)"
+     * in every test, you build a spec once and pass it to given().spec(mySpec).
+     *
+     * Usage in a test would look like:
+     *   RequestSpecification spec = specSetUp("my-jwt-token");
+     *   given().spec(spec).body(...).when().post("/books").then()...
+     *
+     * ====================================================================
+     */
+    protected RequestSpecification specSetUp(String authToken) {
+        // RequestSpecBuilder lets us pre-bake common request config
+        RequestSpecification requestSpec = new RequestSpecBuilder()
+            .setBaseUri("http://localhost")        // same base URI used everywhere
+            .setPort(port)                         // dynamic port from Spring Boot
+            .setContentType(ContentType.JSON)      // all our endpoints consume JSON
+            .addHeader("Authorization", "Bearer " + authToken) // JWT for authenticated routes
+            .build();
+
+        // ResponseSpecBuilder lets us define a "default happy-path" expectation.
+        // You could attach this via .then().spec(responseSpec) in individual tests.
+        ResponseSpecification responseSpec = new ResponseSpecBuilder()
+            .expectStatusCode(200)                 // assume 200 unless overridden
+            .expectContentType(ContentType.JSON)   // assume JSON responses
+            .build();
+
+        // For this example we return just the request spec; the response spec
+        // is shown here to illustrate the concept. You could return both in a
+        // record or store them as fields — whatever fits your style.
+        return requestSpec;
     }
 
     /**

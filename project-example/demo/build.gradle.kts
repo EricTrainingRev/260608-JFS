@@ -19,6 +19,8 @@ repositories {
 }
 
 dependencies {
+	// Put the REST Assured dependenciy above your junit dependency
+	testImplementation ("io.rest-assured:rest-assured:6.0.0")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-webmvc")
 	compileOnly("org.projectlombok:lombok")

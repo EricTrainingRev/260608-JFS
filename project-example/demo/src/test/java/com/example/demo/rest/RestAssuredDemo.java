@@ -69,4 +69,17 @@ public class RestAssuredDemo {
       .statusCode(201);
   }
 
+  @Test
+  void failingTest(){
+    // this will fail since user has no username or password for the registration
+    User badCredentials = new User();
+    given()
+      .contentType(ContentType.JSON)
+      .body(badCredentials)
+    .when()
+      .post("/register")
+    .then()
+      .statusCode(201);
+  }
+
 }

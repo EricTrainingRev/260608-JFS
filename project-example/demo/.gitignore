@@ -77,3 +77,6 @@ gradle-app.setting
 
 **/todo.db
 *.vscode*
+bin/
+
+reports/

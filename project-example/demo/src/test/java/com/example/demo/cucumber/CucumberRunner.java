@@ -4,13 +4,19 @@ import org.junit.platform.suite.api.ConfigurationParameter;
 import org.junit.platform.suite.api.IncludeEngines;
 import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
+
+import java.time.Duration;
 
 @Suite //This tells Junit the class facilitates other test classes
 @IncludeEngines("cucumber")//This tells Junit to let Cucumber facilitate the tests associated with this class
@@ -21,5 +27,33 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)//spins up the application web server for testing
 @TestPropertySource(locations = "classpath:test.properties")//tells Spring to use our test properties
 public class CucumberRunner {
+
+    // this object will control our web interactions
+    private WebDriver driver;
     
+    @Before
+    public void setup(){
+        // This initializes a web driver that interacts with Chrome
+        driver = new ChromeDriver();
+        // This tells Selenium to wait up to the given time for an element to be found on the web page
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+    }
+
+    @After
+    public void teardown(){
+        /*
+            The webdriver is a third party tool that is not limited to the lifecycle of our Java
+            tests. This means we must manually shut it down when our tests are done
+        */
+        if (driver != null){
+            driver.quit();
+            driver = null;
+        }
+    }
+
+    // we need to give ourselves access to the driver
+    public WebDriver getDriver(){
+        return driver;
+    }
+
 }

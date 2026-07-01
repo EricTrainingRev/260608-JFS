@@ -20,8 +20,8 @@ import java.time.Duration;
 
 @Suite //This tells Junit the class facilitates other test classes
 @IncludeEngines("cucumber")//This tells Junit to let Cucumber facilitate the tests associated with this class
-@SelectPackages({"features","com.example.demo.cucumber.steps"})//This tells junit to include the features directory of "resources" and the steps package as part of the suite
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.example.demo.cucumber.steps")//This tells CUCUMBER where the code associated with the acceptance criteria is located
+@SelectPackages({"features","com.example.demo.cucumber"})//This tells junit to include the features directory of "resources" and the steps package as part of the suite
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.example.demo.cucumber")//This tells CUCUMBER where the code associated with the acceptance criteria is located
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "html:reports/cucumber-report.html")//This tells Cucumber to create an html test report
 @CucumberContextConfiguration//This tells Spring to manage dependency injection for Cucumber
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)//spins up the application web server for testing

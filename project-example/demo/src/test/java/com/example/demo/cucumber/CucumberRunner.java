@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import com.example.demo.cucumber.poms.RegistrationPom;
+
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
@@ -30,6 +32,8 @@ public class CucumberRunner {
 
     // this object will control our web interactions
     private WebDriver driver;
+    // this object will facilitate registration page actions 
+    private RegistrationPom registrationPom;
     
     @Before
     public void setup(){
@@ -37,6 +41,7 @@ public class CucumberRunner {
         driver = new ChromeDriver();
         // This tells Selenium to wait up to the given time for an element to be found on the web page
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        registrationPom = new RegistrationPom(driver);
     }
 
     @After
@@ -54,6 +59,10 @@ public class CucumberRunner {
     // we need to give ourselves access to the driver
     public WebDriver getDriver(){
         return driver;
+    }
+
+    public RegistrationPom getRegistrationPom(){
+        return registrationPom;
     }
 
 }

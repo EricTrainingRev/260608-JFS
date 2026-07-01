@@ -42,6 +42,10 @@ dependencies {
     testImplementation("io.cucumber:cucumber-junit-platform-engine:7.33.0")
 	// the sub module that gives us access to the junit test suite feature
     testImplementation("org.junit.platform:junit-platform-suite:1.14.1")
+	// This gives access to the Selenium ecosystem
+	implementation("org.seleniumhq.selenium:selenium-java:4.45.0")
+	// This lets us inject our cucumber test resources into our step classes
+	implementation("io.cucumber:cucumber-spring:7.34.4")
 }
 
 tasks.withType<Test> {

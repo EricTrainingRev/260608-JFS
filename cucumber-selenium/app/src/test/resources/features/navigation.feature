@@ -1,3 +1,4 @@
+@driver
 Feature: Navigating Backwards and Forwards
   As a tester I want to practice using Selenium's navigation methods
   to move backwards and forwards through browser history

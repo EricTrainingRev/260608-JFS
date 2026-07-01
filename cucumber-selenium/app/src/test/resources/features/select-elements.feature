@@ -1,3 +1,4 @@
+@driver
 Feature: Interacting with Select Elements
   As a tester I want to practice using Selenium's Select class
   to interact with dropdown and multi-select elements

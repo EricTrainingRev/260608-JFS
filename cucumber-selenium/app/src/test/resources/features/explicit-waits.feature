@@ -1,3 +1,4 @@
+@driver
 Feature: Explicit Waits
   As a tester I want to practice using Selenium's explicit waits
   to handle elements that appear or change after a delay

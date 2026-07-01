@@ -1,3 +1,4 @@
+@advanced
 Feature: Taking Screenshots
   As a tester I want to practice taking screenshots with Selenium
   to capture the state of the page during test execution

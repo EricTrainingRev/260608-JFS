@@ -1,3 +1,4 @@
+@advanced
 Feature: Actions API
   As a tester I want to practice using Selenium's Actions API
   to perform complex user interactions like drag and drop

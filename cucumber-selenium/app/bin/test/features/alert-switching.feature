@@ -1,3 +1,4 @@
+@driver
 Feature: Alert Switching
   As a tester I want to practice switching to and handling browser alerts
   including simple alerts, confirm dialogs, and prompt dialogs

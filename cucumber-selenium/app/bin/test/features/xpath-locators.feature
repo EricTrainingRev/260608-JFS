@@ -1,3 +1,4 @@
+@driver
 Feature: XPath Locators
   As a tester I want to practice using XPath expressions
   to locate elements on a web page

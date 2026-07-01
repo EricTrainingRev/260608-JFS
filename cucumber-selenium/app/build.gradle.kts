@@ -41,6 +41,15 @@ java {
 tasks.test {
     useJUnitPlatform()
     systemProperty("cucumber.junit-platform.naming-strategy", "long")
+    // Pass cucumber tag filter from command line: ./gradlew test -Dtags="@driver"
+    // Supports multiple tags: -Dtags="@driver or @advanced"
+    systemProperty("cucumber.filter.tags", System.getProperty("tags") ?: "")
+
+    // Change report output directory: ./gradlew test -DreportDir="my-reports"
+    val reportDir = System.getProperty("reportDir")
+    if (reportDir != null) {
+        reports.html.outputLocation.set(file(reportDir))
+    }
 }
 
 application {

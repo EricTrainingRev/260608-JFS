@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPath Practice</title>
+</head>
+<body>
+    <h1>XPath Locator Practice</h1>
+
+    <!-- Elements for absolute and relative XPath -->
+    <div id="user-section">
+        <h2>User Information</h2>
+        <form id="user-form">
+            <div class="form-group">
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="firstName" placeholder="Enter first name">
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="lastName" placeholder="Enter last name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter email">
+            </div>
+            <button type="button" id="submit-btn" class="btn primary">Submit</button>
+        </form>
+    </div>
+
+    <br>
+
+    <!-- Table for XPath axes practice -->
+    <div id="data-section">
+        <h2>Employee Table</h2>
+        <table id="employee-table" border="1" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="emp-name">Alice Johnson</td>
+                    <td>Engineering</td>
+                    <td>Developer</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="emp-name">Bob Smith</td>
+                    <td>Engineering</td>
+                    <td>QA Engineer</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="emp-name">Carol Davis</td>
+                    <td>Marketing</td>
+                    <td>Designer</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="emp-name">Dave Wilson</td>
+                    <td>Engineering</td>
+                    <td>DevOps</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <!-- Nested elements for contains, starts-with, text() -->
+    <div id="messages-section">
+        <h2>Notifications</h2>
+        <ul id="notification-list">
+            <li class="notification success-msg">Operation completed successfully</li>
+            <li class="notification warning-msg">Warning: disk space low</li>
+            <li class="notification error-msg">Error: connection timeout</li>
+            <li class="notification info-msg">Info: system update available</li>
+        </ul>
+    </div>
+</body>
+</html>

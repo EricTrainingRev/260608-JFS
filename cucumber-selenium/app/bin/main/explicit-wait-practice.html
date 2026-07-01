@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explicit Wait Practice</title>
+    <style>
+        .hidden { display: none; }
+        #loading-spinner { color: blue; font-weight: bold; }
+        #result-box { padding: 10px; border: 1px solid green; background-color: #e0ffe0; }
+    </style>
+</head>
+<body>
+    <h1>Explicit Wait Practice</h1>
+
+    <!-- Element that appears after a delay -->
+    <div id="delayed-section">
+        <h2>Delayed Element Appearance</h2>
+        <button id="load-content-btn" onclick="loadContent()">Load Content</button>
+        <p id="loading-spinner" class="hidden">Loading...</p>
+        <p id="delayed-content" class="hidden">This content appeared after a delay!</p>
+    </div>
+
+    <br>
+
+    <!-- Element that becomes clickable after a delay -->
+    <div id="clickable-section">
+        <h2>Element Becomes Clickable</h2>
+        <button id="enable-btn" onclick="enableButton()">Enable the Submit Button</button>
+        <button id="delayed-submit" disabled>Submit (Currently Disabled)</button>
+        <p id="submit-confirmation" class="hidden">Form submitted successfully!</p>
+    </div>
+
+    <br>
+
+    <!-- Text that changes after a delay -->
+    <div id="text-change-section">
+        <h2>Text Change After Delay</h2>
+        <button id="update-status-btn" onclick="updateStatus()">Update Status</button>
+        <p id="status-text">Status: Pending</p>
+    </div>
+
+    <br>
+
+    <!-- Element that disappears (invisibility wait) -->
+    <div id="disappear-section">
+        <h2>Wait for Element to Disappear</h2>
+        <button id="dismiss-btn" onclick="dismissBanner()">Dismiss Banner</button>
+        <div id="banner" style="padding: 10px; background-color: #ffcc00; border: 1px solid #cc9900;">
+            This banner will disappear after a short delay.
+        </div>
+    </div>
+
+    <script>
+        function loadContent() {
+            document.getElementById('loading-spinner').classList.remove('hidden');
+            setTimeout(function() {
+                document.getElementById('loading-spinner').classList.add('hidden');
+                document.getElementById('delayed-content').classList.remove('hidden');
+            }, 3000);
+        }
+
+        function enableButton() {
+            setTimeout(function() {
+                var btn = document.getElementById('delayed-submit');
+                btn.disabled = false;
+                btn.textContent = 'Submit (Now Enabled)';
+                btn.onclick = function() {
+                    document.getElementById('submit-confirmation').classList.remove('hidden');
+                };
+            }, 2000);
+        }
+
+        function updateStatus() {
+            setTimeout(function() {
+                document.getElementById('status-text').textContent = 'Status: Complete';
+            }, 3000);
+        }
+
+        function dismissBanner() {
+            setTimeout(function() {
+                document.getElementById('banner').style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alert Switching Practice</title>
+</head>
+<body>
+    <h1>Alert Switching Practice</h1>
+
+    <!-- Simple Alert -->
+    <div id="simple-alert-section">
+        <h2>Simple Alert</h2>
+        <button id="simple-alert-btn" onclick="triggerSimpleAlert()">Trigger Simple Alert</button>
+        <p id="simple-alert-result"></p>
+    </div>
+
+    <br>
+
+    <!-- Confirm Alert -->
+    <div id="confirm-alert-section">
+        <h2>Confirm Alert</h2>
+        <button id="confirm-alert-btn" onclick="triggerConfirmAlert()">Trigger Confirm Alert</button>
+        <p id="confirm-alert-result"></p>
+    </div>
+
+    <br>
+
+    <!-- Prompt Alert -->
+    <div id="prompt-alert-section">
+        <h2>Prompt Alert</h2>
+        <button id="prompt-alert-btn" onclick="triggerPromptAlert()">Trigger Prompt Alert</button>
+        <p id="prompt-alert-result"></p>
+    </div>
+
+    <br>
+
+    <!-- Delayed Alert -->
+    <div id="delayed-alert-section">
+        <h2>Delayed Alert (appears after 2 seconds)</h2>
+        <button id="delayed-alert-btn" onclick="triggerDelayedAlert()">Trigger Delayed Alert</button>
+        <p id="delayed-alert-result"></p>
+    </div>
+
+    <script>
+        function triggerSimpleAlert() {
+            alert('This is a simple alert!');
+            document.getElementById('simple-alert-result').textContent = 'Simple alert was handled.';
+        }
+
+        function triggerConfirmAlert() {
+            var result = confirm('Do you want to proceed?');
+            if (result) {
+                document.getElementById('confirm-alert-result').textContent = 'You clicked OK.';
+            } else {
+                document.getElementById('confirm-alert-result').textContent = 'You clicked Cancel.';
+            }
+        }
+
+        function triggerPromptAlert() {
+            var input = prompt('Please enter your name:');
+            if (input !== null && input !== '') {
+                document.getElementById('prompt-alert-result').textContent = 'Hello, ' + input + '!';
+            } else {
+                document.getElementById('prompt-alert-result').textContent = 'No name entered.';
+            }
+        }
+
+        function triggerDelayedAlert() {
+            setTimeout(function() {
+                alert('This alert appeared after a delay!');
+                document.getElementById('delayed-alert-result').textContent = 'Delayed alert was handled.';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

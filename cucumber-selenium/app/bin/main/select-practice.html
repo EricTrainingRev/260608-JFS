@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Element Practice</title>
+</head>
+<body>
+    <h1>Select Element Practice</h1>
+
+    <label for="single-select">Choose a programming language:</label>
+    <select id="single-select" name="language">
+        <option value="">--Select--</option>
+        <option value="java">Java</option>
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="csharp">C#</option>
+        <option value="ruby">Ruby</option>
+    </select>
+
+    <br><br>
+
+    <label for="multi-select">Select your skills (hold Ctrl to select multiple):</label><br>
+    <select id="multi-select" name="skills" multiple size="5">
+        <option value="selenium">Selenium</option>
+        <option value="cucumber">Cucumber</option>
+        <option value="junit">JUnit</option>
+        <option value="testng">TestNG</option>
+        <option value="rest-assured">REST Assured</option>
+    </select>
+
+    <br><br>
+
+    <p id="selected-language">Selected language: None</p>
+    <p id="selected-skills">Selected skills: None</p>
+
+    <script>
+        document.getElementById('single-select').addEventListener('change', function() {
+            var text = this.options[this.selectedIndex].text;
+            document.getElementById('selected-language').textContent = 'Selected language: ' + text;
+        });
+
+        document.getElementById('multi-select').addEventListener('change', function() {
+            var selected = [];
+            for (var option of this.selectedOptions) {
+                selected.push(option.text);
+            }
+            if (selected.length === 0) {
+                document.getElementById('selected-skills').textContent = 'Selected skills: None';
+            } else {
+                document.getElementById('selected-skills').textContent = 'Selected skills: ' + selected.join(', ');
+            }
+        });
+    </script>
+</body>
+</html>

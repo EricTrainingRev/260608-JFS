@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actions API Practice</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px #000;
+            cursor: grab;
+        }
+        #red-box {
+            background-color: red;
+            top: 150px;
+            left: 100px;
+        }
+        #yellow-box {
+            background-color: yellow;
+            color: black;
+            text-shadow: none;
+            top: 150px;
+            left: 400px;
+        }
+        #orange-box {
+            background-color: orange;
+            top: 150px;
+            left: 400px;
+            display: none;
+        }
+        #result-message {
+            margin-top: 20px;
+        }
+        .arena {
+            position: relative;
+            width: 700px;
+            height: 300px;
+            border: 1px dashed #999;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Actions API Practice</h1>
+    <p>Drag the red box onto the yellow box to combine them into an orange box.</p>
+    <p id="result-message">Status: Waiting for drag action</p>
+
+    <div class="arena">
+        <div id="red-box" class="box">Red</div>
+        <div id="yellow-box" class="box">Yellow</div>
+        <div id="orange-box" class="box">Orange</div>
+    </div>
+
+    <script>
+        var redBox = document.getElementById('red-box');
+        var yellowBox = document.getElementById('yellow-box');
+        var orangeBox = document.getElementById('orange-box');
+        var resultMessage = document.getElementById('result-message');
+
+        // Track drag position for the red box
+        var offsetX = 0, offsetY = 0, isDragging = false;
+
+        redBox.addEventListener('mousedown', function(e) {
+            e.preventDefault(); // Prevent native drag behavior
+            isDragging = true;
+            offsetX = e.clientX - redBox.getBoundingClientRect().left;
+            offsetY = e.clientY - redBox.getBoundingClientRect().top;
+            redBox.style.cursor = 'grabbing';
+            redBox.style.zIndex = '10'; // Keep red box on top while dragging
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            redBox.style.left = (e.clientX - offsetX - redBox.parentElement.getBoundingClientRect().left) + 'px';
+            redBox.style.top = (e.clientY - offsetY - redBox.parentElement.getBoundingClientRect().top) + 'px';
+        });
+
+        document.addEventListener('mouseup', function(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            redBox.style.cursor = 'grab';
+
+            // Check if red box overlaps yellow box
+            var redRect = redBox.getBoundingClientRect();
+            var yellowRect = yellowBox.getBoundingClientRect();
+
+            var overlapX = redRect.left < yellowRect.right && redRect.right > yellowRect.left;
+            var overlapY = redRect.top < yellowRect.bottom && redRect.bottom > yellowRect.top;
+
+            if (overlapX && overlapY) {
+                // Combine: hide red and yellow, show orange
+                redBox.style.display = 'none';
+                yellowBox.style.display = 'none';
+                orangeBox.style.display = 'flex';
+                resultMessage.textContent = 'Status: Boxes combined into orange!';
+            }
+        });
+    </script>
+</body>
+</html>

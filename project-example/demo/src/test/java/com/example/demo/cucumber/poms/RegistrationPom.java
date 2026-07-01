@@ -13,43 +13,44 @@ import org.openqa.selenium.support.PageFactory;
     automation
 */
 public class RegistrationPom {
-    
-    private WebDriver driver;
 
-    @FindBy(id = "username")
-    private WebElement usernameInput;
+  private WebDriver driver;
 
-    @FindBy(id = "password")
-    private WebElement passwordInput;
+  @FindBy(id = "username")
+  private WebElement usernameInput;
 
-    @FindBy(className = "error-message")
-    private WebElement statusMessage;
+  @FindBy(id = "password")
+  private WebElement passwordInput;
 
-    public RegistrationPom(WebDriver driver){
-        this.driver = driver;
-        /*
-            The main benefit of Selenium POMs is we can configure Selenium to automatically find
-            the web elements we want to interact with on the page and create a WebElement object
-            of them for us whenever we reference the field associated with that web element. The
-            PageFactory is the tool we use to configure this. We simply need to provide a reference
-            to the driver the PageFactory should use and a reference to the POM itself (via "this" keyword)
+  @FindBy(className = "error-message")
+  private WebElement statusMessage;
 
-            Note this also protects us from "stale elements". These are WebElements that were created when a web page was in
-            a previous state. Even if they are still valid locators Selenium does not want to take the chance of causing unintended
-            side effects and will throw an error if you try to interact with a stale element. The PageFactory prevents this from 
-            happening
-        */
-        PageFactory.initElements(driver, this);
-    }
+  public RegistrationPom(WebDriver driver) {
+    this.driver = driver;
+    /*
+        The main benefit of Selenium POMs is we can configure Selenium to automatically find
+        the web elements we want to interact with on the page and create a WebElement object
+        of them for us whenever we reference the field associated with that web element. The
+        PageFactory is the tool we use to configure this. We simply need to provide a reference
+        to the driver the PageFactory should use and a reference to the POM itself (via "this" keyword)
 
-    // Once you have your fields set you can create helper methods to perform common actions on your web page
+        Note this also protects us from "stale elements". These are WebElements that were created when a web page was in
+        a previous state. Even if they are still valid locators Selenium does not want to take the chance of causing unintended
+        side effects and will throw an error if you try to interact with a stale element. The PageFactory prevents this from
+        happening
+    */
+    PageFactory.initElements(driver, this);
+  }
 
-    public void enterCredentials(String username, String password){
-        usernameInput.sendKeys(username);
-        passwordInput.sendKeys(password);
-    }
+  // Once you have your fields set you can create helper methods to perform common actions on your
+  // web page
 
-    public String getStatusMessage(){
-        return statusMessage.getText();
-    }
+  public void enterCredentials(String username, String password) {
+    usernameInput.sendKeys(username);
+    passwordInput.sendKeys(password);
+  }
+
+  public String getStatusMessage() {
+    return statusMessage.getText();
+  }
 }

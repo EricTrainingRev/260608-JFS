@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Format Written Java File",
+  "description": "After a write operation, runs Spotless formatting only on the specific Java file(s) that were modified.",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": [
+      "write"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "If the file that was just written is a Java file (.java), run the command: ./gradlew spotlessApply -PspotlessIdeHook=\\\"{filePath}\\\" where {filePath} is the path of the file that was just written. If it is not a Java file, do nothing."
+  },
+  "workspaceFolderName": "demo",
+  "shortName": "format-written-java"
+}

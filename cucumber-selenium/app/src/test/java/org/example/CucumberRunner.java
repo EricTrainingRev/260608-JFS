@@ -23,8 +23,15 @@ public class CucumberRunner {
 
     @Before
     public void setup(){
+        /*
+            Use Options classes when you need to provide startup instructions and configurations for
+            the browser when the Driver spins up a session. Headless is a good one to memorize since
+            running your tests in headless mode, especially when you have a multitude of tests, will
+            speed them up significantly
+        */
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
+        // make sure to pass your options as an argument to your driver's constructor
         driver = new ChromeDriver(options);
     }
 

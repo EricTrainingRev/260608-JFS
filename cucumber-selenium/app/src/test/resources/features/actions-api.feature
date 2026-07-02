@@ -3,6 +3,7 @@ Feature: Actions API
   As a tester I want to practice using Selenium's Actions API
   to perform complex user interactions like drag and drop
 
+@current
   Scenario: Drag the red box onto the yellow box to create an orange box
     Given I am on the actions practice page
     Then the red box should be visible

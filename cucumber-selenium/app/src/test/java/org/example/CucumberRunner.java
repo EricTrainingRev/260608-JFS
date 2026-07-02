@@ -13,6 +13,8 @@ import io.cucumber.java.Before;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
+import java.time.Duration;
+
 @Suite
 @IncludeEngines("cucumber")
 @SelectPackages({"features","org.example"})
@@ -30,9 +32,12 @@ public class CucumberRunner {
             speed them up significantly
         */
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        // options.addArguments("--headless");
+        options.addArguments("--start-maximized");
         // make sure to pass your options as an argument to your driver's constructor
         driver = new ChromeDriver(options);
+        // this is a good option to prevent flakey tests, it is NOT a good option for accomodating intentionally long-waited actions
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
     }
 
     @After

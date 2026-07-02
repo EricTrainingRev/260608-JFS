@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screenshot Practice</title>
+    <style>
+        .image-container {
+            width: 600px;
+            height: 400px;
+            border: 2px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .active-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Screenshot Practice</h1>
+    <p id="current-image-label">Currently displaying: Image 1</p>
+
+    <div class="controls">
+        <button id="btn-img1" class="active-btn" onclick="showImage(1)">Show Image 1</button>
+        <button id="btn-img2" onclick="showImage(2)">Show Image 2</button>
+        <button id="btn-img3" onclick="showImage(3)">Show Image 3</button>
+    </div>
+
+    <div class="image-container">
+        <img id="displayed-image" src="puppy-1.jpg" alt="Displayed image">
+    </div>
+
+    <script>
+        function showImage(num) {
+            document.getElementById('displayed-image').src = 'puppy-' + num + '.jpg';
+            document.getElementById('current-image-label').textContent = 'Currently displaying: Image ' + num;
+
+            // Update active button styling
+            document.querySelectorAll('.controls button').forEach(function(btn) {
+                btn.classList.remove('active-btn');
+            });
+            document.getElementById('btn-img' + num).classList.add('active-btn');
+        }
+    </script>
+</body>
+</html>

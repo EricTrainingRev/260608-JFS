@@ -20,7 +20,7 @@ Your API tests must go beyond simple "200 OK" checks. They must validate:
 ### 2. End-to-End Testing (Selenium, Cucumber, JUnit 5)
 You must simulate real user behavior to ensure the frontend and backend are communicating correctly.
 *   **Behavior Driven Development (BDD):** Use Cucumber to write tests in plain English using the Gherkin syntax.
-*   **Scenario Coverage:** Every user story from Project 1 must have at least one automated E2E scenario (e.g., "Successful User Registration" or "Task Deletion Workflow").
+*   **Scenario Coverage:** Every user story from Project 1 must have at least one positive and one negative automated E2E scenario (e.g., "Successful User Registration" or "Task Deletion Workflow").
 *   **Browser Automation:** Use Selenium to drive the browser through the UI, interacting with forms, buttons, and navigation elements.
 
 ## Deliverables for Phase 1

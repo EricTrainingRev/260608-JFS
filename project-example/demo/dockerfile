@@ -4,7 +4,7 @@ FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 # Copy project files (filtered by .dockerignore)
 COPY . .
-# Make the Gradle wrapper executable and build the fat jar, skipping tests
+# Make the Gradle wrapper executable and build the fat jar, skipping tests and formatting checks
 RUN ./gradlew build -x test -x spotlessCheck
 
 # Why two stages? The builder stage contains the full JDK, Gradle, and all source

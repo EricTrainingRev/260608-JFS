@@ -50,7 +50,7 @@ export class Register {
     //     responseType: 'text' tells Angular to treat the response body as plain text
     //                   instead of attempting to parse it as JSON
     this.http
-      .post('http://localhost:8080/register', body, { observe: 'response', responseType: 'text' })
+      .post('/api/register', body, { observe: 'response', responseType: 'text' })
       .subscribe({
         // .subscribe() triggers the HTTP request and lets us handle the result.
         // http.post() returns an Observable — it won't execute until subscribed to.

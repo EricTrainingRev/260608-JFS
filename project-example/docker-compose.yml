@@ -1,0 +1,15 @@
+services:
+  backend:
+    image: esuminski/summer-back:latest
+    container_name: summer-backend
+    # Not exposing ports to host — only accessible within the Docker network
+    expose:
+      - "8080"
+
+  frontend:
+    image: esuminski/summer-front:latest
+    container_name: summer-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend

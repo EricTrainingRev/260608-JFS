@@ -7,7 +7,7 @@ services:
       - "8080"
 
   frontend:
-    image: esuminski/summer-front:latest
+    image: esuminski/summer-front:compose
     container_name: summer-frontend
     ports:
       - "80:80"

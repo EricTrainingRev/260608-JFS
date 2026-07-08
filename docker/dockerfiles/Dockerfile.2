@@ -1,0 +1,17 @@
+FROM node:lts-slim
+# If you want to copy EVERYTHING from the source into the image you can use
+# periods to represent everything. The syntax below tells Docker to copy the workspace
+# into the image. If you want to always exclude files and/or directories you can create
+# a dockerignore file
+COPY . .
+
+# Anytime you want to run a command as part of the image creation process you use the RUN keyword.
+# Keep in mind that anytime a new step is reached it is run in a new execution environment. This
+# means if you set a value in one RUN, like an environment variable, it will not be available in
+# the next run step. You either need to chain your commands in a single RUN call or execute a
+# script.
+
+RUN npm install
+RUN npx tsc
+
+ENTRYPOINT [ "node", "./dist/index.js" ]

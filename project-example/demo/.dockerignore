@@ -1,0 +1,29 @@
+# Build outputs
+build/
+bin/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+
+# Kiro
+.kiro/
+
+# Gradle caches (wrapper jar/props are needed, but caches are not)
+.gradle/
+
+# Git
+.git/
+.gitattributes
+.gitignore
+
+# Database file
+todo.db
+
+# Reports
+reports/
+
+# Docker
+dockerfile
+.dockerignore

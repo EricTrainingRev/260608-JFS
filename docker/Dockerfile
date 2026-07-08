@@ -1,18 +1,17 @@
-# You always need to specify the starting condition for your image, which sets the stage for
-# all actions you will take to get your container runtime setup. Here we are specifying we
-# want the starting condition to be a linux distro with node without the extra software normally
-# included for general computer use. This is a striped down runtime environment
-FROM node:lts
+FROM node:lts-slim AS builder
+COPY . .
+# One way to reduce the number of layers in your image (and therfore keep it smaller)
+# is to chain commands in a RUN statement
+RUN npm install && npx tsc
 
-# After you set your starting condition you need to tell docker what files to copy into the
-# image environment, which we can then use in our container. Here we keep it simple and just
-# pass the already created index.js into the image environment renamed as "app.js"
-COPY ./dist/index.js app.js
+# What we do here is create a multi-stage build. Instead of having one base and performing all actions
+# and saving all our data in that environment we let the first environment (the first FROM statement)
+# act as our building environment. Any packages we need to build, software we need to download, we can
+# do in the build environment. After that we create another "production" environment where we copy
+# over only the files we need to run our app. This let's us standardize our build environment within
+# the image, but then only keep what is need for runtime in the container when we create it
+FROM node:lts-slim
 
-# Once you have everything ready to be run you use ENTRYPOINT to specify the command you want run
-# when a container is created from the image associated with this dockerfile
+# Here we specify we are copying index.js from the builder environment, not our host environment
+COPY --from=builder /dist/index.js app.js
 ENTRYPOINT [ "node", "app.js" ]
-
-# When building an image make sure to include a tag and a reference to the location of
-# the dockerfile. Use `-t` and then a tag name to give the image a name, and then reference the
-# location of the dockerfile relative to the working directory (. if it is in the same location)

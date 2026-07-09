@@ -18,7 +18,7 @@ export class BookService {
   private http = inject(HttpClient);
 
   // Base URL for the books REST endpoint
-  private baseUrl = 'http://localhost:8080/books';
+  private baseUrl = '/api/books';
 
   /** Fetch all books (that belong to the user) from the API */
   getAll(): Observable<Book[]> {

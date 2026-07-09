@@ -1,0 +1,29 @@
+# It can be a headache trying to manage multiple containers all at once; docker compose is the solution
+# to this potential headache. In a compose file we declare "Services": these services represent
+# a container within the deployment. 
+services:
+  # This "backend" service respresents our spring application container. Within the compose deployment
+  # this service can actually be referenced as "backend". One of the main benefits of deploying
+  # containers within a compose setup is docker's automatic network managment of the containers.
+  # The frontend service can make http requests to "backend:8080" and because of docker's automatic
+  # network configurations the request will actually be sent to the "backend" container
+  backend:
+    # This tells docker what image to use for the service: docker will pull the image if needed
+    image: esuminski/summer-back:latest
+    # This tells docker what name to assign to the container
+    container_name: summer-backend
+    # Not exposing ports to host — only accessible within the Docker network
+    expose:
+      - "8080"
+
+  # This "frontend" service is our entrypoint: it exposes the angular application for us so we can
+  # interact with whatever application is deployed (in this case the example summer reading list)
+  frontend:
+    image: esuminski/summer-front:compose
+    container_name: summer-frontend
+    # This tells docker to expose port 80 publically: this gives us access to the angular app
+    ports:
+      - "80:80"
+    # This tells docker to wait to start the frontend service untill backend is ready
+    depends_on:
+      - backend

@@ -1,0 +1,20 @@
+services:
+  jenkins-controller:
+    # Jenkins requires a JRE since it is itself a Java app 
+    image: jenkins/jenkins:lts-jdk21
+    container_name: jenkins-controller
+    # the two properties below give the Jenkins instance the ability to interact with docker without
+    # any extra configuration on the host machine
+    privileged: true
+    user: root
+    ports:
+      - "8080:8080"   # Web UI
+      - "50000:50000" # Agent communication
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      # this is how Jenkins interacts with Docker. Technically any docker containers Jenkins
+      # creates to facilitate our CICD pipeline will be "sibling" containers
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+volumes:
+  jenkins_data:

@@ -38,6 +38,8 @@ A successful presentation is evaluated on:
 *   **Deployment Accuracy:** Does the application in the cloud match the code in your repository?
 *   **Professional Communication:** Can the team clearly explain the relationship between Git, Jenkins, Docker, and AWS?
 
+NOTE: the success criteria above represents the "best case scenario". Make sure to showcase however much or little you accomplished utilizing Docker, AWS, and Jenkins. Working Tests is the MVP requirement, everything else is stretch goals. If you do not fully implement one of the stretch goals make sure you still take some time to describe what your plans was and how you would accomplish it in another sprint.
+
 ***
 
 **Project Complete.**

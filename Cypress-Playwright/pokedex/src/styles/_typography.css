@@ -1,0 +1,28 @@
+/* === Typography === */
+.text-center {
+  text-align: center;
+}
+
+.text-yellow {
+  color: #ffcb05;
+}
+
+.text-shadow-blue {
+  text-shadow: 1px 1px 2px #2a75bb;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.font-heavy {
+  font-weight: 900;
+}
+
+.font-sans {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.font-black {
+  font-family: 'Arial Black', sans-serif;
+}

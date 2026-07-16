@@ -1,0 +1,12 @@
+/* === Text Sizes === */
+.text-xl {
+  font-size: 4rem;
+}
+
+.text-md {
+  font-size: 1.25rem;
+}
+
+.line-height-md {
+  line-height: 1.6;
+}

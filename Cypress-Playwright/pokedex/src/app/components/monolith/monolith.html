@@ -1,0 +1,29 @@
+<h1>{{headerText()}}</h1>
+
+<p>{{instructions()}}</p>
+
+<input type="text" [(ngModel)]="pokeSearch">
+
+<button (click)="getPokemon(pokeSearch)">Search</button>
+
+@if (this.pokemon().name !== "") {
+    <h2>{{this.pokemon().name | titlecase}}</h2>    
+}
+
+@for (sprite of this.getSprites(); track $index) {
+    @if (sprite) {
+        <img [src]="sprite" [id]="`image-${$index}`" [alt]="`pokeSprite-${$index}`"> 
+    }
+}
+
+<ul>
+    @for (typeObject of this.getTypes(); track $index) {
+        <li [appType]="typeObject.type.name" [id]="`type-${$index}`">{{typeObject.type.name | titlecase}}</li>
+    }    
+</ul>
+
+<ul>
+    @for (moveObject of this.getMoves(); track $index) {
+        <li>{{moveObject.move.name | moveTransform}}</li>
+    }
+</ul>

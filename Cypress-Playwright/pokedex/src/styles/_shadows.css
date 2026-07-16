@@ -1,0 +1,8 @@
+/* === Custom Shadows === */
+.text-shadow-outline {
+  text-shadow:
+    -3px -3px 0 #2a75bb,
+    3px -3px 0 #2a75bb,
+    -3px 3px 0 #2a75bb,
+    3px 3px 0 #2a75bb;
+}

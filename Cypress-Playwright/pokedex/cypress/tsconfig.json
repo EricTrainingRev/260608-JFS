@@ -1,0 +1,33 @@
+/*
+  Cypress TypeScript Configuration
+  --------------------------------
+  This tsconfig provides type information for Cypress test files so that
+  the editor's IntelliSense recognizes globals like `cy`, `describe`, `it`, etc.
+
+  How it connects to the main project tsconfig:
+  - "extends": "../tsconfig.json" inherits the shared compiler settings
+    (strict mode, target, etc.) from the root Angular project config.
+  - The root tsconfig.json lists this file under "references", which tells
+    the TypeScript language server to treat the cypress/ folder as its own
+    sub-project with its own type scope.
+
+  Why it's needed:
+  - Angular's root tsconfig uses project references and does not include
+    cypress/ files directly. Without this file, the language server has no
+    way to resolve Cypress's global types, causing "cy is not defined" errors
+    in the editor even though tests run fine via the Cypress runner.
+*/
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    // "types": ["cypress"] pulls in Cypress's global type declarations
+    // (cy, describe, it, beforeEach, etc.) without needing explicit imports.
+    "types": ["cypress"],
+    "moduleResolution": "bundler",
+    "module": "ES2022"
+  },
+  // Includes all .ts files in the cypress/ directory tree.
+  "include": ["**/*.ts"],
+  "extends": "../tsconfig.json"
+}

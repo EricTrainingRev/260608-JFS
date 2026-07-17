@@ -29,6 +29,10 @@ export default defineConfig({
     // It's where we register custom commands and plugin commands (axe, image snapshot).
     supportFile: 'cypress/support/e2e.ts',
 
+    // enable this setting if you want to use the Cypress Studio feature to record user
+    // actions and have them mapped to tests
+    experimentalStudio: true,
+
     // setupNodeEvents runs in Node.js (not the browser). This is where we register
     // plugins that need server-side access — like writing snapshot image files to disk.
     setupNodeEvents(on) {

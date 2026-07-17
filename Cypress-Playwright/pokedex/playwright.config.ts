@@ -114,5 +114,21 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
+    {
+      name: 'edge',
+      use: {
+        ...devices['Desktop Edge'],
+        storageState: './playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
+    {
+      name: 'mobile-chrome',
+      use: {
+        ...devices['Pixel 7'],
+        storageState: './playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
+    },
   ],
 });

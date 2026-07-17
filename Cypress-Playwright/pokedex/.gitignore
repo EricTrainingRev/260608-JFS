@@ -42,3 +42,8 @@ testem.log
 Thumbs.db
 
 cypress/screenshots
+
+# Playwright
+playwright/.auth/
+playwright-results/
+playwright-report/

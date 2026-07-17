@@ -8,7 +8,11 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "pw:test": "npx playwright test",
+    "pw:test:ui": "npx playwright test --ui",
+    "pw:codegen": "npx playwright codegen http://localhost:4200",
+    "pw:report": "npx playwright show-report"
   },
   "prettier": {
     "printWidth": 100,
@@ -38,6 +42,7 @@
     "@angular/build": "^20.2.2",
     "@angular/cli": "^20.2.2",
     "@angular/compiler-cli": "^20.2.0",
+    "@playwright/test": "^1.61.1",
     "@simonsmith/cypress-image-snapshot": "^10.0.0",
     "@types/jasmine": "~5.1.0",
     "axe-core": "^4.10.0",

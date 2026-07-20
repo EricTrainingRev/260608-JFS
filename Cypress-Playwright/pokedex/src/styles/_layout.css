@@ -1,0 +1,12 @@
+/* === Layout === */
+.margin-lg {
+  margin: 2rem 0;
+}
+
+.margin-md {
+  margin: 1rem auto;
+}
+
+.max-width-md {
+  max-width: 600px;
+}

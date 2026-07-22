@@ -68,8 +68,10 @@ export default defineConfig({
   testDir: './playwright',
   timeout: 5000,
   retries: process.env.CI ? 1 : 0,
+  reporter: "html",
   use: {
     baseURL: 'http://localhost:4200',
+    
 
     /**
      * Trace capture — records DOM snapshots, network, console, and actionability logs.
